@@ -20,8 +20,22 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
         
         webView.delegate = self
         
-        let url : NSURL! = NSURL(string: "https://api.put.io/v2/oauth2/authenticate?client_id=2187&response_type=token&redirect_uri=https://putio-javiman.herokuapp.com/")
-        webView.loadRequest(NSURLRequest(URL: url))
+        self.navigationItem.title = "Login put.io"
+        
+        if Reachability.isConnectedToNetwork() == true {
+            let url : NSURL! = NSURL(string: "https://api.put.io/v2/oauth2/authenticate?client_id=2187&response_type=token&redirect_uri=https://putio-javiman.herokuapp.com/")
+            webView.loadRequest(NSURLRequest(URL: url))
+        } else {
+            // Show error message
+            let alertController = UIAlertController(title: "Ooops", message:
+                "You need an internet connection for using this app.", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: {
+                action in
+                exit(0)
+            }))
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
     }
     
     override func didReceiveMemoryWarning() {
