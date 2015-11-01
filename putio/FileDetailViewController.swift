@@ -19,6 +19,7 @@ class FileDetailViewController: UIViewController {
     
     @IBOutlet weak var fileName: UILabel!
     @IBOutlet weak var fileSize: UILabel!
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var playButton: UIButton!
     
     override func viewDidLoad() {
@@ -29,6 +30,13 @@ class FileDetailViewController: UIViewController {
         
         fileName.text = self.file!.getName()
         fileSize.text = self.file!.getSize()
+        
+        if let thumbnailURL = NSURL(string: self.file!.getThumbnail()) {
+            if let data = NSData(contentsOfURL: thumbnailURL){
+                imageView.contentMode = UIViewContentMode.ScaleAspectFit
+                imageView.image = UIImage(data: data)
+            }
+        }
         
         if file!.isVideo() {
             playButton.setTitle("Play Video", forState: UIControlState.Normal)

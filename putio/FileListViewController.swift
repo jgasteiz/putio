@@ -41,7 +41,7 @@ class FileListViewController: UITableViewController {
         
         // Set table cells automatic height
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.estimatedRowHeight = 50
+        tableView.estimatedRowHeight = 64
         tableView.rowHeight = UITableViewAutomaticDimension
         
         // Initialize spinner
@@ -123,6 +123,12 @@ extension FileListViewController {
         
         // Set the labels text with the story values
         cell.fileName.text = "\(file.getName())"
+        
+        if let iconURL = NSURL(string: file.getIcon()) {
+            if let data = NSData(contentsOfURL: iconURL){
+                cell.fileIconImageView.image = UIImage(data: data)
+            }
+        }
         
         return cell
     }

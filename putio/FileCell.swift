@@ -12,6 +12,7 @@ import UIKit
 class FileCell: UITableViewCell {
     
     @IBOutlet weak var fileName: UILabel!
+    @IBOutlet weak var fileIconImageView: UIImageView!
     
     override var bounds: CGRect {
         didSet {
