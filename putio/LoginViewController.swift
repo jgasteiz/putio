@@ -13,6 +13,7 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet weak var webView: UIWebView!
     
     let fileListSegueId: String = "showFiles"
+    let mainNavigationViewControllerId = "MainNavigationViewController"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,16 +49,18 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
             let url = String(request.URL!)
             if url.containsString("https://putio-javiman.herokuapp.com/#access_token=") {
                 
+                // Get the access token from the url.
                 let accessToken = url.stringByReplacingOccurrencesOfString("https://putio-javiman.herokuapp.com/#access_token=", withString: "")
                 
+                // Store it in the standard preferences.
                 NSUserDefaults.standardUserDefaults().setObject(accessToken, forKey: "accessToken")
                 
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier("FileListViewController") as! FileListViewController
-                let navigationController = UINavigationController(rootViewController: vc)
+                // Open the main navigation controller.
+                let navigationController = self.storyboard?.instantiateViewControllerWithIdentifier(mainNavigationViewControllerId) as! UINavigationController
                 self.presentViewController(navigationController, animated: false, completion: nil)
             }
         }
-        return true;
+        return true
     }
     
 }

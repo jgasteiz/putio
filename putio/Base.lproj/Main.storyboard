@@ -57,7 +57,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MuQ-kh-lLg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2827" y="1589"/>
+            <point key="canvasLocation" x="2848" y="1649"/>
         </scene>
         <!--File Detail View Controller-->
         <scene sceneID="f1Q-WW-srW">
@@ -146,7 +146,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1lM-L4-9bd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3561" y="1598"/>
+            <point key="canvasLocation" x="4373" y="1598"/>
         </scene>
         <!--Web View View Controller-->
         <scene sceneID="Ec8-wV-Dqb">
@@ -182,7 +182,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZx-xs-e0Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4470" y="1268"/>
+            <point key="canvasLocation" x="5282" y="1268"/>
         </scene>
         <!--AV Player View Controller-->
         <scene sceneID="5Eh-9C-IEA">
@@ -190,7 +190,7 @@
                 <avPlayerViewController storyboardIdentifier="MediaViewController" videoGravity="AVLayerVideoGravityResizeAspect" id="Eih-vz-fqq" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RnN-5P-ake" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4374" y="2034"/>
+            <point key="canvasLocation" x="5186" y="2034"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="SyH-e0-L2d">
@@ -226,36 +226,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ga1-g2-rA0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2003" y="1151"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="IvI-4p-3XB">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Df2-JO-ccH" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RbD-Zn-vIh">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Xds-j9-Mwz" kind="relationship" relationship="rootViewController" id="k0h-ds-9vF"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="O2i-eU-Xfb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2827" y="777"/>
+            <point key="canvasLocation" x="2001" y="809"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7t4-7G-CUk">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uPk-3G-pUG" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KAl-qI-nJB">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="KAl-qI-nJB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
+                        <color key="barTintColor" red="0.93725490196078431" green="0.32549019607843138" blue="0.31372549019607843" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -265,6 +247,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fNn-dS-QPg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1191" y="1151"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="vBk-ey-bHO">
+            <objects>
+                <navigationController storyboardIdentifier="MainNavigationViewController" automaticallyAdjustsScrollViewInsets="NO" id="cqb-0Y-eF8" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="vIe-30-5Dg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.93725490199999995" green="0.32549019610000002" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Xds-j9-Mwz" kind="relationship" relationship="rootViewController" id="43P-po-LEK"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4y1-P7-f3l" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2017" y="1649"/>
         </scene>
     </scenes>
 </document>
