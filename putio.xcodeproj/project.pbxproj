@@ -12,6 +12,7 @@
 		595D36241BE54A0900A386EA /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D36231BE54A0900A386EA /* FileCell.swift */; };
 		59B751C21BE677F50048513C /* FileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C11BE677F50048513C /* FileDetailViewController.swift */; };
 		59B751C41BE6872E0048513C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C31BE6872E0048513C /* LoginViewController.swift */; };
+		59B751CA1BE6A0A80048513C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C91BE6A0A80048513C /* Reachability.swift */; };
 		59C495121BE5788600FA4B12 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C495111BE5788600FA4B12 /* MediaPlayer.framework */; };
 		59D1DFCC1BE4C1390074A7C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D1DFCB1BE4C1390074A7C6 /* AppDelegate.swift */; };
 		59D1DFCE1BE4C1390074A7C6 /* FileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D1DFCD1BE4C1390074A7C6 /* FileListViewController.swift */; };
@@ -47,6 +48,7 @@
 		595D36231BE54A0900A386EA /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		59B751C11BE677F50048513C /* FileDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDetailViewController.swift; sourceTree = "<group>"; };
 		59B751C31BE6872E0048513C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		59B751C91BE6A0A80048513C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		59C495111BE5788600FA4B12 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		59D1DFC81BE4C1390074A7C6 /* putio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = putio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59D1DFCB1BE4C1390074A7C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,14 @@
 			name = Tasks;
 			sourceTree = "<group>";
 		};
+		59B751C81BE6A09A0048513C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				59B751C91BE6A0A80048513C /* Reachability.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		59D1DFBF1BE4C1390074A7C6 = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +160,7 @@
 		59D1DFCA1BE4C1390074A7C6 /* putio */ = {
 			isa = PBXGroup;
 			children = (
+				59B751C81BE6A09A0048513C /* Helpers */,
 				59B751C51BE69BF70048513C /* Layout */,
 				59B751C61BE69C080048513C /* Models */,
 				59B751C71BE69C100048513C /* Tasks */,
@@ -321,6 +332,7 @@
 				595D36241BE54A0900A386EA /* FileCell.swift in Sources */,
 				59D1DFCC1BE4C1390074A7C6 /* AppDelegate.swift in Sources */,
 				595D36201BE5435500A386EA /* FetchPutioTask.swift in Sources */,
+				59B751CA1BE6A0A80048513C /* Reachability.swift in Sources */,
 				59DCE51D1BE5576800087EA8 /* WebViewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
