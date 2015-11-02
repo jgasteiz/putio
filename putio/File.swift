@@ -14,18 +14,16 @@ class File {
     var id: Int?
     var name: String?
     var parentId: Int?
-    var icon: String?
     var thumbnail: String?
     var contentType: String?
     var createdAt: String?
     var hasMp4: Bool?
     var size: Int?
     
-    init(id: Int?, name: String?, parentId: Int?, icon: String?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?) {
+    init(id: Int?, name: String?, parentId: Int?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?) {
         self.id = id
         self.name = name
         self.parentId = parentId
-        self.icon = icon
         self.thumbnail = thumbnail
         self.contentType = contentType
         self.createdAt = createdAt

@@ -50,7 +50,6 @@ struct FetchPutioTask {
                         id: fileDict["id"] as? Int,
                         name: fileDict["name"] as? String,
                         parentId: fileDict["parent_id"] as? Int,
-                        icon: fileDict["icon"] as? String,
                         thumbnail: fileDict["screenshot"] as? String,
                         contentType: fileDict["content_type"] as? String,
                         createdAt: fileDict["created_at"] as? String,
