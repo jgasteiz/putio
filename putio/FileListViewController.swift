@@ -124,11 +124,7 @@ extension FileListViewController {
         // Set the labels text with the story values
         cell.fileName.text = "\(file.getName())"
         
-        if let iconURL = NSURL(string: file.getIcon()) {
-            if let data = NSData(contentsOfURL: iconURL){
-                cell.fileIconImageView.image = UIImage(data: data)
-            }
-        }
+        cell.fileIconImageView.image = file.getIcon()
         
         return cell
     }

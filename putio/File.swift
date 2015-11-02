@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class File {
 
@@ -47,8 +48,19 @@ class File {
         return self.parentId != nil ? self.parentId! : -1
     }
     
-    func getIcon() -> String {
-        return self.icon != nil ? self.icon! : ""
+    func getIcon() -> UIImage {
+        if isAudio() {
+            return UIImage(named: "Audio")!
+        } else if isDirectory() {
+            return UIImage(named: "Directory")!
+        } else if isPdf() {
+            return UIImage(named: "PDF")!
+        } else if isPicture() {
+            return UIImage(named: "Picture")!
+        } else if isVideo() {
+            return UIImage(named: "Video")!
+        }
+        return UIImage(named: "File")!
     }
     
     func getThumbnail() -> String {
@@ -80,12 +92,24 @@ class File {
         }
     }
     
-    func isVideo() -> Bool {
-        return self.getContentType().containsString("video")
+    func isDirectory() -> Bool {
+        return self.getContentType().containsString("directory")
     }
     
     func isAudio() -> Bool {
         return self.getContentType().containsString("audio")
+    }
+    
+    func isPdf() -> Bool {
+        return self.getContentType().containsString("pdf")
+    }
+    
+    func isPicture() -> Bool {
+        return self.getContentType().containsString("image")
+    }
+    
+    func isVideo() -> Bool {
+        return self.getContentType().containsString("video")
     }
     
     func getDownloadURL() -> NSURL {
