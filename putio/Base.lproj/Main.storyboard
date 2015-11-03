@@ -126,11 +126,27 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m68-9d-aV9">
-                                <rect key="frame" x="285.5" y="455" width="30" height="30"/>
+                                <rect key="frame" x="285" y="455" width="30" height="30"/>
                                 <animations/>
                                 <state key="normal" title="Play"/>
                                 <connections>
                                     <action selector="viewFile:" destination="GzM-2G-9hg" eventType="touchUpInside" id="Ht9-lU-nTV"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jv5-Lk-gZQ">
+                                <rect key="frame" x="266" y="493" width="69" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Download"/>
+                                <connections>
+                                    <action selector="downloadFile:" destination="GzM-2G-9hg" eventType="touchUpInside" id="eYF-I5-b3k"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LvQ-xl-3zu">
+                                <rect key="frame" x="237" y="493" width="126" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Remove download"/>
+                                <connections>
+                                    <action selector="deleteFile:" destination="GzM-2G-9hg" eventType="touchUpInside" id="Vf0-EK-WQR"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -144,9 +160,12 @@
                             <constraint firstItem="IJ9-vH-glw" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="8" id="LAI-F0-Qgg"/>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="top" secondItem="QsO-ha-Dsg" secondAttribute="bottom" constant="8" id="RkG-kw-xl6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="QsO-ha-Dsg" secondAttribute="trailing" id="URG-N1-8sz"/>
+                            <constraint firstItem="LvQ-xl-3zu" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="8" id="Yuc-km-TNM"/>
+                            <constraint firstItem="Jv5-Lk-gZQ" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="ZEd-WN-wCs"/>
                             <constraint firstItem="5Gm-XC-9Er" firstAttribute="leading" secondItem="RYB-Ec-ieA" secondAttribute="leadingMargin" id="ZXM-wa-9Ea"/>
                             <constraint firstItem="Afq-aU-fxA" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="8" id="dx2-rY-zYl"/>
                             <constraint firstAttribute="leadingMargin" secondItem="IJ9-vH-glw" secondAttribute="leading" id="f8q-qE-2er"/>
+                            <constraint firstItem="Jv5-Lk-gZQ" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="8" id="iQE-EE-WNk"/>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="trailing" secondItem="RYB-Ec-ieA" secondAttribute="trailingMargin" id="j5j-cK-WYm"/>
                             <constraint firstItem="5Gm-XC-9Er" firstAttribute="top" secondItem="Afq-aU-fxA" secondAttribute="bottom" constant="9" id="lCU-D6-hna"/>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="oC4-0g-paZ"/>
@@ -154,6 +173,7 @@
                             <constraint firstItem="QsO-ha-Dsg" firstAttribute="top" secondItem="Afq-aU-fxA" secondAttribute="bottom" constant="9" id="ujT-7x-eGW"/>
                             <constraint firstItem="QsO-ha-Dsg" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="37" id="vMK-Yb-P6v"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Afq-aU-fxA" secondAttribute="trailing" id="zCq-pk-iGE"/>
+                            <constraint firstItem="LvQ-xl-3zu" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="zfk-jX-dMI"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -162,6 +182,8 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="deleteButton" destination="LvQ-xl-3zu" id="hnU-xZ-58a"/>
+                        <outlet property="downloadButton" destination="Jv5-Lk-gZQ" id="xgo-fK-f9F"/>
                         <outlet property="fileName" destination="Afq-aU-fxA" id="9dt-cd-9lG"/>
                         <outlet property="fileSize" destination="QsO-ha-Dsg" id="H8T-Zf-WmV"/>
                         <outlet property="imageView" destination="yKV-Yf-bmO" id="T6r-Pj-tmM"/>
