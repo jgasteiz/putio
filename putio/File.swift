@@ -19,8 +19,9 @@ class File {
     var createdAt: String?
     var hasMp4: Bool?
     var size: Int?
+    var fileExtension: String?
     
-    init(id: Int?, name: String?, parentId: Int?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?) {
+    init(id: Int?, name: String?, parentId: Int?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?, fileExtension: String?) {
         self.id = id
         self.name = name
         self.parentId = parentId
@@ -29,6 +30,7 @@ class File {
         self.createdAt = createdAt
         self.hasMp4 = hasMp4
         self.size = size
+        self.fileExtension = fileExtension
     }
     
     ////////////////////////////
@@ -88,6 +90,14 @@ class File {
         } else {
             return "\(bytes)B"
         }
+    }
+    
+    func getFileExtension() -> String {
+        return self.fileExtension != nil ? self.fileExtension! : ""
+    }
+    
+    func getOfflineFileName() -> String {
+        return "\(self.getId()).\(self.getFileExtension())"
     }
     
     func isDirectory() -> Bool {

@@ -54,7 +54,8 @@ struct FetchPutioTask {
                         contentType: fileDict["content_type"] as? String,
                         createdAt: fileDict["created_at"] as? String,
                         hasMp4: fileDict["is_mp4_available"] as? Bool,
-                        size: fileDict["size"] as? Int
+                        size: fileDict["size"] as? Int,
+                        fileExtension: fileDict["extension"] as? String
                     ))
                 }
                 
