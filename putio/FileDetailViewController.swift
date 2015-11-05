@@ -12,6 +12,9 @@ import AVFoundation
 
 class FileDetailViewController: UIViewController {
     
+    // Fetch task
+    var fetchPutioTask: FetchPutioTask = FetchPutioTask.sharedInstance
+    
     var file: File? = nil
     
     let webViewSegueId = "showWeb"
@@ -28,6 +31,8 @@ class FileDetailViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var cancelDownload: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,13 +43,16 @@ class FileDetailViewController: UIViewController {
         fileName.text = file!.getName()
         fileSize.text = file!.getSize()
         
+        imageView.hidden = true
         if let thumbnailURL = NSURL(string: file!.getThumbnail()) {
             if let data = NSData(contentsOfURL: thumbnailURL){
+                imageView.hidden = false
                 imageView.contentMode = UIViewContentMode.ScaleAspectFit
                 imageView.image = UIImage(data: data)
             }
         }
         
+        // Set title for the play button.
         if file!.isVideo() {
             playButton.setTitle("Play Video", forState: UIControlState.Normal)
         } else if file!.isAudio() {
@@ -71,6 +79,23 @@ class FileDetailViewController: UIViewController {
         else {
             deleteButton.hidden = true
         }
+        
+        // Initialise the activity indicator
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        
+        // TODO: THIS IS TERRIBLE, GET RID OF IT
+        let isFileDownloading = NSUserDefaults.standardUserDefaults().boolForKey("downloading_\(file!.getId())")
+        if (isFileDownloading == true) {
+            animateActivityIndicator()
+        } else {
+            cancelDownload.hidden = true
+        }
+        
+        // If the file has been downloaded, set the file offline url.
+        if isFileDownloaded() {
+            file!.offlineURL = offlineFileURL!
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -88,7 +113,9 @@ class FileDetailViewController: UIViewController {
     @IBAction func viewFile(sender: AnyObject) {
         if file!.isVideo() || file!.isAudio() {
             let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MediaViewController") as! AVPlayerViewController
+            
             secondViewController.player = AVPlayer(URL: file!.getDownloadURL())
+            
             self.presentViewController(secondViewController, animated: true, completion: nil)
         } else {
             self.performSegueWithIdentifier(webViewSegueId, sender: sender)
@@ -103,11 +130,8 @@ class FileDetailViewController: UIViewController {
         }
         
         // Save file.
-        // TODO: save the file using an async task.
-        let fileData = NSData(contentsOfURL: file!.getDownloadURL())!
-        fileData.writeToURL(offlineFileURL!, atomically: true)
-        downloadButton.hidden = true
-        deleteButton.hidden = false
+        animateActivityIndicator()
+        fetchPutioTask.downloadFile(file!, offlineFileURL: offlineFileURL!, onTaskDone: onFileDownloadSuccess)
     }
     
     @IBAction func deleteFile(sender: AnyObject) {
@@ -126,8 +150,40 @@ class FileDetailViewController: UIViewController {
         downloadButton.hidden = false
     }
     
+    @IBAction func cancelDownload(sender: AnyObject) {
+        stopActivityIndicator()
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "downloading_\(file!.getId())")
+        deleteFile(sender)
+    }
+    
+    func onFileDownloadSuccess() {
+        print("File downloaded successfully: \(file!.getName())")
+        
+        // TODO: THIS IS TERRIBLE, GET RID OF IT
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "downloading_\(file!.getId())")
+        
+        stopActivityIndicator()
+        
+        // Set the file offline url.
+        file!.offlineURL = offlineFileURL!
+    }
+    
     func isFileDownloaded() -> Bool {
         return fileManager.fileExistsAtPath(offlineFileURL!.path!)
+    }
+    
+    func animateActivityIndicator() {
+        activityIndicator.startAnimating()
+        cancelDownload.hidden = false
+        downloadButton.hidden = true
+        deleteButton.hidden = true
+    }
+    
+    func stopActivityIndicator() {
+        activityIndicator.stopAnimating()
+        downloadButton.hidden = true
+        cancelDownload.hidden = true
+        deleteButton.hidden = false
     }
     
     func notifyUser(message: String) -> Void {

@@ -149,20 +149,36 @@
                                     <action selector="deleteFile:" destination="GzM-2G-9hg" eventType="touchUpInside" id="Vf0-EK-WQR"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="YGa-dp-kMv">
+                                <rect key="frame" x="290" y="498" width="20" height="20"/>
+                                <animations/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yHl-q3-lVc">
+                                <rect key="frame" x="241" y="531" width="118" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Cancel download"/>
+                                <connections>
+                                    <action selector="cancelDownload:" destination="GzM-2G-9hg" eventType="touchUpInside" id="nqA-hO-j8y"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="leading" secondItem="RYB-Ec-ieA" secondAttribute="leadingMargin" id="0cD-AY-KFU"/>
+                            <constraint firstItem="YGa-dp-kMv" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="13" id="3sP-pp-7bO"/>
                             <constraint firstItem="m68-9d-aV9" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="48T-0W-yL2"/>
                             <constraint firstItem="QsO-ha-Dsg" firstAttribute="leading" secondItem="5Gm-XC-9Er" secondAttribute="trailing" constant="8" id="5EK-CT-caq"/>
                             <constraint firstItem="m68-9d-aV9" firstAttribute="top" secondItem="yKV-Yf-bmO" secondAttribute="bottom" constant="8" id="AI4-3N-J0r"/>
                             <constraint firstItem="IJ9-vH-glw" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="8" id="LAI-F0-Qgg"/>
+                            <constraint firstItem="yHl-q3-lVc" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="PTi-TR-kHK"/>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="top" secondItem="QsO-ha-Dsg" secondAttribute="bottom" constant="8" id="RkG-kw-xl6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="QsO-ha-Dsg" secondAttribute="trailing" id="URG-N1-8sz"/>
+                            <constraint firstItem="yHl-q3-lVc" firstAttribute="top" secondItem="LvQ-xl-3zu" secondAttribute="bottom" constant="8" id="XtD-z4-1lO"/>
                             <constraint firstItem="LvQ-xl-3zu" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="8" id="Yuc-km-TNM"/>
                             <constraint firstItem="Jv5-Lk-gZQ" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="ZEd-WN-wCs"/>
                             <constraint firstItem="5Gm-XC-9Er" firstAttribute="leading" secondItem="RYB-Ec-ieA" secondAttribute="leadingMargin" id="ZXM-wa-9Ea"/>
+                            <constraint firstItem="YGa-dp-kMv" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="blF-6S-qmQ"/>
                             <constraint firstItem="Afq-aU-fxA" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="8" id="dx2-rY-zYl"/>
                             <constraint firstAttribute="leadingMargin" secondItem="IJ9-vH-glw" secondAttribute="leading" id="f8q-qE-2er"/>
                             <constraint firstItem="Jv5-Lk-gZQ" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="8" id="iQE-EE-WNk"/>
@@ -182,6 +198,8 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="YGa-dp-kMv" id="kcx-o5-1gK"/>
+                        <outlet property="cancelDownload" destination="yHl-q3-lVc" id="7ji-kG-Zhh"/>
                         <outlet property="deleteButton" destination="LvQ-xl-3zu" id="hnU-xZ-58a"/>
                         <outlet property="downloadButton" destination="Jv5-Lk-gZQ" id="xgo-fK-f9F"/>
                         <outlet property="fileName" destination="Afq-aU-fxA" id="9dt-cd-9lG"/>
