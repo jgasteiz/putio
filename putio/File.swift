@@ -21,6 +21,8 @@ class File {
     var size: Int?
     var fileExtension: String?
     
+    var offlineURL: NSURL?
+    
     init(id: Int?, name: String?, parentId: Int?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?, fileExtension: String?) {
         self.id = id
         self.name = name
@@ -121,6 +123,10 @@ class File {
     }
     
     func getDownloadURL() -> NSURL {
+        if self.offlineURL != nil {
+            return self.offlineURL!
+        }
+        
         if self.getHasMp4() {
             return NSURL(string: "https://api.put.io/v2/files/\(self.getId())/mp4/download?oauth_token=6HVUGYDO")!
         } else {
