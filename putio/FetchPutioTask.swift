@@ -7,15 +7,20 @@
 //
 
 import Foundation
+import Alamofire
 
-struct FetchPutioTask {
+class FetchPutioTask {
     
     let fetchFilesURL: String
+    var isTaskRunning: Bool
+    var isCancelled: Bool
     
     static let sharedInstance = FetchPutioTask()
     
     private init() {
         self.fetchFilesURL = "https://api.put.io/v2/files/list"
+        self.isTaskRunning = false
+        self.isCancelled = false
     }
     
     func getApiURL (parent: File?, accessToken: String) -> NSURL {
@@ -75,21 +80,23 @@ struct FetchPutioTask {
         downloadTask.resume()
     }
     
-    func downloadFile(file: File, offlineFileURL: NSURL, onTaskDone: () -> Void) {
-        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
-        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
-        dispatch_async(backgroundQueue, {
-            
-            // TODO: THIS IS TERRIBLE, GET RID OF IT
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "downloading_\(file.getId())")
-            
-            // Download the file in the background.
-            let fileData = NSData(contentsOfURL: file.getDownloadURL())!
-            fileData.writeToURL(offlineFileURL, atomically: true)
-            
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                onTaskDone()
-            })
-        })
+    func downloadFile(file: File, onFileDownloadSuccess: () -> Void, onFileDownloadError: (NSError) -> Void, onFileDownloadProgress: (Float, Float) -> Void) {
+        
+        let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
+        Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
+            .progress { bytesRead, totalBytesRead, totalBytesExpectedToRead in
+                // This closure is NOT called on the main queue for performance
+                // reasons. To update your ui, dispatch to the main queue.
+                dispatch_async(dispatch_get_main_queue()) {
+                    onFileDownloadProgress(Float(totalBytesRead), Float(totalBytesExpectedToRead))
+                }
+            }
+            .response { _, _, _, error in
+                if let error = error {
+                    onFileDownloadError(error)
+                } else {
+                    onFileDownloadSuccess()
+                }
+        }
     }
 }

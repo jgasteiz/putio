@@ -149,10 +149,6 @@
                                     <action selector="deleteFile:" destination="GzM-2G-9hg" eventType="touchUpInside" id="Vf0-EK-WQR"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="YGa-dp-kMv">
-                                <rect key="frame" x="290" y="498" width="20" height="20"/>
-                                <animations/>
-                            </activityIndicatorView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yHl-q3-lVc">
                                 <rect key="frame" x="241" y="531" width="118" height="30"/>
                                 <animations/>
@@ -161,15 +157,25 @@
                                     <action selector="cancelDownload:" destination="GzM-2G-9hg" eventType="touchUpInside" id="nqA-hO-j8y"/>
                                 </connections>
                             </button>
+                            <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8oe-JA-ewK">
+                                <rect key="frame" x="225" y="507" width="150" height="2"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="epf-bf-Xzr"/>
+                                </constraints>
+                                <color key="progressTintColor" red="0.93725490199999995" green="0.32549019610000002" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="trackTintColor" red="0.93725490199999995" green="0.32549019610000002" blue="0.31372549020000001" alpha="0.24671336206896552" colorSpace="calibratedRGB"/>
+                            </progressView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="leading" secondItem="RYB-Ec-ieA" secondAttribute="leadingMargin" id="0cD-AY-KFU"/>
-                            <constraint firstItem="YGa-dp-kMv" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="13" id="3sP-pp-7bO"/>
                             <constraint firstItem="m68-9d-aV9" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="48T-0W-yL2"/>
                             <constraint firstItem="QsO-ha-Dsg" firstAttribute="leading" secondItem="5Gm-XC-9Er" secondAttribute="trailing" constant="8" id="5EK-CT-caq"/>
+                            <constraint firstItem="8oe-JA-ewK" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="6kH-1l-i2q"/>
                             <constraint firstItem="m68-9d-aV9" firstAttribute="top" secondItem="yKV-Yf-bmO" secondAttribute="bottom" constant="8" id="AI4-3N-J0r"/>
+                            <constraint firstItem="8oe-JA-ewK" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="22" id="HdB-2q-zgg"/>
                             <constraint firstItem="IJ9-vH-glw" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="8" id="LAI-F0-Qgg"/>
                             <constraint firstItem="yHl-q3-lVc" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="PTi-TR-kHK"/>
                             <constraint firstItem="yKV-Yf-bmO" firstAttribute="top" secondItem="QsO-ha-Dsg" secondAttribute="bottom" constant="8" id="RkG-kw-xl6"/>
@@ -178,7 +184,6 @@
                             <constraint firstItem="LvQ-xl-3zu" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="8" id="Yuc-km-TNM"/>
                             <constraint firstItem="Jv5-Lk-gZQ" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="ZEd-WN-wCs"/>
                             <constraint firstItem="5Gm-XC-9Er" firstAttribute="leading" secondItem="RYB-Ec-ieA" secondAttribute="leadingMargin" id="ZXM-wa-9Ea"/>
-                            <constraint firstItem="YGa-dp-kMv" firstAttribute="centerX" secondItem="RYB-Ec-ieA" secondAttribute="centerX" id="blF-6S-qmQ"/>
                             <constraint firstItem="Afq-aU-fxA" firstAttribute="top" secondItem="wJf-LC-nUg" secondAttribute="bottom" constant="8" id="dx2-rY-zYl"/>
                             <constraint firstAttribute="leadingMargin" secondItem="IJ9-vH-glw" secondAttribute="leading" id="f8q-qE-2er"/>
                             <constraint firstItem="Jv5-Lk-gZQ" firstAttribute="top" secondItem="m68-9d-aV9" secondAttribute="bottom" constant="8" id="iQE-EE-WNk"/>
@@ -198,7 +203,6 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="activityIndicator" destination="YGa-dp-kMv" id="kcx-o5-1gK"/>
                         <outlet property="cancelDownload" destination="yHl-q3-lVc" id="7ji-kG-Zhh"/>
                         <outlet property="deleteButton" destination="LvQ-xl-3zu" id="hnU-xZ-58a"/>
                         <outlet property="downloadButton" destination="Jv5-Lk-gZQ" id="xgo-fK-f9F"/>
@@ -206,6 +210,7 @@
                         <outlet property="fileSize" destination="QsO-ha-Dsg" id="H8T-Zf-WmV"/>
                         <outlet property="imageView" destination="yKV-Yf-bmO" id="T6r-Pj-tmM"/>
                         <outlet property="playButton" destination="m68-9d-aV9" id="x3b-MH-6Eo"/>
+                        <outlet property="progressView" destination="8oe-JA-ewK" id="f6f-nw-7vk"/>
                         <segue destination="P9a-n4-9aL" kind="show" identifier="showWeb" id="gzg-cX-GYI"/>
                     </connections>
                 </viewController>

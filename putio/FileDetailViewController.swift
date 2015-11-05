@@ -17,13 +17,13 @@ class FileDetailViewController: UIViewController {
     
     var file: File? = nil
     
+    var statusCheckTimer: NSTimer?
+    
     let webViewSegueId = "showWeb"
     let mediaSegueId = "showMedia"
     
     // Get an instance of the file manager
     let fileManager = NSFileManager.defaultManager()
-    let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-    var offlineFileURL: NSURL?
     
     @IBOutlet weak var fileName: UILabel!
     @IBOutlet weak var fileSize: UILabel!
@@ -31,8 +31,8 @@ class FileDetailViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var cancelDownload: UIButton!
+    @IBOutlet weak var progressView: UIProgressView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,18 +61,16 @@ class FileDetailViewController: UIViewController {
             playButton.setTitle("View in WebView", forState: UIControlState.Normal)
         }
         
-        // Initialise the `offline file url`
-        let offlineMediaDirectory = documentsDirectory.URLByAppendingPathComponent("Offline", isDirectory: true)
         // Try to create it if it doesn't exist.
+        let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
         do {
-            try fileManager.createDirectoryAtURL(offlineMediaDirectory, withIntermediateDirectories: false, attributes: nil)
+            try fileManager.createDirectoryAtURL(documentsDirectory, withIntermediateDirectories: false, attributes: nil)
         } catch {
             print("Failed creating downloads directory")
         }
-        offlineFileURL = offlineMediaDirectory.URLByAppendingPathComponent(file!.getOfflineFileName())
         
         // If the file is downloaded, remove the "Download" button.
-        if isFileDownloaded() {
+        if file!.isFileOffline() {
             downloadButton.hidden = true
         }
         // Otherwise remove the "Delete download" button.
@@ -80,21 +78,12 @@ class FileDetailViewController: UIViewController {
             deleteButton.hidden = true
         }
         
-        // Initialise the activity indicator
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        
-        // TODO: THIS IS TERRIBLE, GET RID OF IT
-        let isFileDownloading = NSUserDefaults.standardUserDefaults().boolForKey("downloading_\(file!.getId())")
-        if (isFileDownloading == true) {
+        if (fetchPutioTask.isTaskRunning) {
             animateActivityIndicator()
+            // check status of the task every second
+            self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: Selector("checkDownloadStatus"), userInfo: nil, repeats: true)
         } else {
             cancelDownload.hidden = true
-        }
-        
-        // If the file has been downloaded, set the file offline url.
-        if isFileDownloaded() {
-            file!.offlineURL = offlineFileURL!
         }
     }
     
@@ -114,7 +103,7 @@ class FileDetailViewController: UIViewController {
         if file!.isVideo() || file!.isAudio() {
             let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MediaViewController") as! AVPlayerViewController
             
-            secondViewController.player = AVPlayer(URL: file!.getDownloadURL())
+            secondViewController.player = AVPlayer(URL: file!.getPlaybackURL())
             
             self.presentViewController(secondViewController, animated: true, completion: nil)
         } else {
@@ -124,25 +113,25 @@ class FileDetailViewController: UIViewController {
     
     @IBAction func downloadFile(sender: AnyObject) {
         // If the file is downloaded already, don't continue.
-        if isFileDownloaded() {
+        if file!.isFileOffline() {
             notifyUser("This file has been downloaded already.")
             return
         }
         
         // Save file.
         animateActivityIndicator()
-        fetchPutioTask.downloadFile(file!, offlineFileURL: offlineFileURL!, onTaskDone: onFileDownloadSuccess)
+        fetchPutioTask.downloadFile(file!, onFileDownloadSuccess: onFileDownloadSuccess, onFileDownloadError: onFileDownloadError, onFileDownloadProgress: onFileDownloadProgress)
     }
     
     @IBAction func deleteFile(sender: AnyObject) {
         // If the file hasn't been downloaded yet, don't continue.
-        if !isFileDownloaded() {
+        if !file!.isFileOffline() {
             notifyUser("This file hasn't been downloaded yet.")
             return
         }
         
         do {
-            try fileManager.removeItemAtURL(offlineFileURL!)
+            try fileManager.removeItemAtURL(file!.getOfflineURL())
         } catch {
             print("There was an error deleting \(file!.getOfflineFileName())")
         }
@@ -152,35 +141,37 @@ class FileDetailViewController: UIViewController {
     
     @IBAction func cancelDownload(sender: AnyObject) {
         stopActivityIndicator()
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "downloading_\(file!.getId())")
+        fetchPutioTask.isTaskRunning = false
         deleteFile(sender)
     }
     
     func onFileDownloadSuccess() {
-        print("File downloaded successfully: \(file!.getName())")
+        print("File downloaded successfully: \(self.file!.getName())")
         
-        // TODO: THIS IS TERRIBLE, GET RID OF IT
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "downloading_\(file!.getId())")
-        
-        stopActivityIndicator()
-        
-        // Set the file offline url.
-        file!.offlineURL = offlineFileURL!
+        self.stopActivityIndicator()
     }
     
-    func isFileDownloaded() -> Bool {
-        return fileManager.fileExistsAtPath(offlineFileURL!.path!)
+    func onFileDownloadError(error: NSError) {
+        print("Failed with error: \(error)")
+    }
+    
+    func onFileDownloadProgress(totalBytesRead: Float, totalBytesExpectedToRead: Float) {
+        print("Total bytes read on main queue: \(totalBytesRead)/\(totalBytesExpectedToRead)")
+        let progress = totalBytesRead / totalBytesExpectedToRead
+        self.progressView.setProgress(progress, animated: true)
     }
     
     func animateActivityIndicator() {
-        activityIndicator.startAnimating()
+        progressView.setProgress(0, animated: false)
+        progressView.hidden = false
         cancelDownload.hidden = false
         downloadButton.hidden = true
         deleteButton.hidden = true
     }
     
     func stopActivityIndicator() {
-        activityIndicator.stopAnimating()
+        progressView.setProgress(0, animated: false)
+        progressView.hidden = true
         downloadButton.hidden = true
         cancelDownload.hidden = true
         deleteButton.hidden = false
@@ -191,5 +182,13 @@ class FileDetailViewController: UIViewController {
         let alertController = UIAlertController(title: "Ooops", message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
         presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func checkDownloadStatus() -> Void {
+        print("Checking download status")
+        if (!fetchPutioTask.isTaskRunning) {
+            stopActivityIndicator()
+            self.statusCheckTimer!.invalidate()
+        }
     }
 }

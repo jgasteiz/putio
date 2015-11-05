@@ -21,8 +21,6 @@ class File {
     var size: Int?
     var fileExtension: String?
     
-    var offlineURL: NSURL?
-    
     init(id: Int?, name: String?, parentId: Int?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?, fileExtension: String?) {
         self.id = id
         self.name = name
@@ -99,7 +97,17 @@ class File {
     }
     
     func getOfflineFileName() -> String {
-        return "\(self.getId()).\(self.getFileExtension())"
+        return self.getName()
+    }
+    
+    func getOfflineURL() -> NSURL {
+        let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+        return documentsDirectory.URLByAppendingPathComponent(self.getOfflineFileName())
+    }
+    
+    func isFileOffline() -> Bool {
+        let fileManager = NSFileManager.defaultManager()
+        return fileManager.fileExistsAtPath(self.getOfflineURL().path!)
     }
     
     func isDirectory() -> Bool {
@@ -122,11 +130,14 @@ class File {
         return self.getContentType().containsString("video")
     }
     
-    func getDownloadURL() -> NSURL {
-        if self.offlineURL != nil {
-            return self.offlineURL!
+    func getPlaybackURL() -> NSURL {
+        if self.isFileOffline() {
+            return self.getOfflineURL()
         }
-        
+        return self.getDownloadURL()
+    }
+    
+    func getDownloadURL() -> NSURL {
         if self.getHasMp4() {
             return NSURL(string: "https://api.put.io/v2/files/\(self.getId())/mp4/download?oauth_token=6HVUGYDO")!
         } else {
