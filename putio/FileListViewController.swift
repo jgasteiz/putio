@@ -16,7 +16,10 @@ class FileListViewController: UITableViewController {
     let fileDetailViewControllerId = "FileDetailViewController"
     
     // Fetch task
-    var fetchPutioTask: FetchPutioTask?
+    var fetchPutioTask: FetchPutioTask = FetchPutioTask.sharedInstance
+    
+    // Access token for api access
+    var accessToken: String?
     
     // This won't be null if we're not in the root.
     var parent: File?
@@ -51,8 +54,7 @@ class FileListViewController: UITableViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator!)
         
         // Get the access token from the preferences.
-        let accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as! String
-        fetchPutioTask = FetchPutioTask(accessToken: accessToken)
+        accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String
         
         // Fetch the files and directories in the current directory.
         getDirectoryFiles()
@@ -65,7 +67,7 @@ class FileListViewController: UITableViewController {
     
     func getDirectoryFiles() {
         activityIndicator!.startAnimating()
-        fetchPutioTask!.fetchDirectoryFiles(parent, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
+        fetchPutioTask.fetchDirectoryFiles(parent, accessToken: accessToken!, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
     }
 
     func onFilesLoadSuccess(files: [File]) {

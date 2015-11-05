@@ -11,14 +11,14 @@ import Foundation
 struct FetchPutioTask {
     
     let fetchFilesURL: String
-    let accessToken: String
     
-    init(accessToken: String) {
+    static let sharedInstance = FetchPutioTask()
+    
+    private init() {
         self.fetchFilesURL = "https://api.put.io/v2/files/list"
-        self.accessToken = accessToken
     }
     
-    func getApiURL (parent: File?) -> NSURL {
+    func getApiURL (parent: File?, accessToken: String) -> NSURL {
         if parent != nil {
             return NSURL(string: "\(fetchFilesURL)?oauth_token=\(accessToken)&parent_id=\(parent!.getId())")!
         } else {
@@ -26,9 +26,9 @@ struct FetchPutioTask {
         }
     }
     
-    func fetchDirectoryFiles(parent: File?, onTaskDone: ([File]) -> Void, onTaskError: () -> Void) {
+    func fetchDirectoryFiles(parent: File?, accessToken: String, onTaskDone: ([File]) -> Void, onTaskError: () -> Void) {
         
-        let apiURL = getApiURL(parent)
+        let apiURL = getApiURL(parent, accessToken: accessToken)
 
         // Get the top stories
         let sharedSession = NSURLSession.sharedSession()
@@ -73,5 +73,23 @@ struct FetchPutioTask {
         
         // Perform the API call.
         downloadTask.resume()
+    }
+    
+    func downloadFile(file: File, offlineFileURL: NSURL, onTaskDone: () -> Void) {
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        dispatch_async(backgroundQueue, {
+            
+            // TODO: THIS IS TERRIBLE, GET RID OF IT
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "downloading_\(file.getId())")
+            
+            // Download the file in the background.
+            let fileData = NSData(contentsOfURL: file.getDownloadURL())!
+            fileData.writeToURL(offlineFileURL, atomically: true)
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                onTaskDone()
+            })
+        })
     }
 }
