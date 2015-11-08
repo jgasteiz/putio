@@ -22,9 +22,6 @@ class FileDetailViewController: UIViewController {
     let webViewSegueId = "showWeb"
     let mediaSegueId = "showMedia"
     
-    // Get an instance of the file manager
-    let fileManager = NSFileManager.defaultManager()
-    
     @IBOutlet weak var fileName: UILabel!
     @IBOutlet weak var fileSize: UILabel!
     @IBOutlet weak var imageView: UIImageView!
@@ -108,6 +105,7 @@ class FileDetailViewController: UIViewController {
             return
         }
         
+        let fileManager = NSFileManager.defaultManager()
         do {
             try fileManager.removeItemAtURL(file!.getOfflineURL())
         } catch {

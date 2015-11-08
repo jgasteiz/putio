@@ -12,6 +12,7 @@
 		595D36201BE5435500A386EA /* FetchPutioTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D361F1BE5435500A386EA /* FetchPutioTask.swift */; };
 		595D36221BE544B700A386EA /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D36211BE544B700A386EA /* File.swift */; };
 		595D36241BE54A0900A386EA /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D36231BE54A0900A386EA /* FileCell.swift */; };
+		597D306E1BEFA12900504B04 /* OfflineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D306D1BEFA12900504B04 /* OfflineViewController.swift */; };
 		59B751C21BE677F50048513C /* FileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C11BE677F50048513C /* FileDetailViewController.swift */; };
 		59B751C41BE6872E0048513C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C31BE6872E0048513C /* LoginViewController.swift */; };
 		59B751CA1BE6A0A80048513C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C91BE6A0A80048513C /* Reachability.swift */; };
@@ -119,6 +120,7 @@
 		595D361F1BE5435500A386EA /* FetchPutioTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchPutioTask.swift; sourceTree = "<group>"; };
 		595D36211BE544B700A386EA /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		595D36231BE54A0900A386EA /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		597D306D1BEFA12900504B04 /* OfflineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineViewController.swift; sourceTree = "<group>"; };
 		59B751C11BE677F50048513C /* FileDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDetailViewController.swift; sourceTree = "<group>"; };
 		59B751C31BE6872E0048513C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		59B751C91BE6A0A80048513C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				59D1DFCD1BE4C1390074A7C6 /* FileListViewController.swift */,
 				59B751C31BE6872E0048513C /* LoginViewController.swift */,
 				59DCE51C1BE5576800087EA8 /* WebViewViewController.swift */,
+				597D306D1BEFA12900504B04 /* OfflineViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -476,6 +479,7 @@
 				59B751C41BE6872E0048513C /* LoginViewController.swift in Sources */,
 				595D36221BE544B700A386EA /* File.swift in Sources */,
 				59D1DFD41BE4C1390074A7C6 /* putio.xcdatamodeld in Sources */,
+				597D306E1BEFA12900504B04 /* OfflineViewController.swift in Sources */,
 				59B751C21BE677F50048513C /* FileDetailViewController.swift in Sources */,
 				59D1DFCE1BE4C1390074A7C6 /* FileListViewController.swift in Sources */,
 				595D36241BE54A0900A386EA /* FileCell.swift in Sources */,

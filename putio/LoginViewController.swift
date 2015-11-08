@@ -13,7 +13,7 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
     @IBOutlet weak var webView: UIWebView!
     
     let fileListSegueId: String = "showFiles"
-    let mainNavigationViewControllerId = "MainNavigationViewController"
+    let mainViewControllerId = "MainViewController"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +56,7 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
                 NSUserDefaults.standardUserDefaults().setObject(accessToken, forKey: "accessToken")
                 
                 // Open the main navigation controller.
-                let navigationController = self.storyboard?.instantiateViewControllerWithIdentifier(mainNavigationViewControllerId) as! UINavigationController
+                let navigationController = self.storyboard?.instantiateViewControllerWithIdentifier(mainViewControllerId) as! UITabBarController
                 self.presentViewController(navigationController, animated: false, completion: nil)
             }
         }
