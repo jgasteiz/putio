@@ -401,7 +401,7 @@
         <!--Navigation Controller-->
         <scene sceneID="NfA-Jq-9Cv">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CAB-O4-c6A" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="OfflineViewController" automaticallyAdjustsScrollViewInsets="NO" id="CAB-O4-c6A" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" systemItem="downloads" id="cfd-nc-cAn" userLabel="Offline"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="pya-sN-feG">

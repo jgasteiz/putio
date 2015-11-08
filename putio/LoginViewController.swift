@@ -14,6 +14,7 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
     
     let fileListSegueId: String = "showFiles"
     let mainViewControllerId = "MainViewController"
+    let offlineViewControllerId = "OfflineViewController"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,15 +28,9 @@ class LoginViewController: UIViewController, UIWebViewDelegate {
             let url : NSURL! = NSURL(string: "https://api.put.io/v2/oauth2/authenticate?client_id=2187&response_type=token&redirect_uri=https://putio-javiman.herokuapp.com/")
             webView.loadRequest(NSURLRequest(URL: url))
         } else {
-            // Show error message
-            let alertController = UIAlertController(title: "Ooops", message:
-                "You need an internet connection for using this app.", preferredStyle: UIAlertControllerStyle.Alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: {
-                action in
-                exit(0)
-            }))
-            
-            self.presentViewController(alertController, animated: true, completion: nil)
+            // Take user to downloads view
+            let offlineViewController = self.storyboard?.instantiateViewControllerWithIdentifier(offlineViewControllerId) as! UINavigationController
+            self.presentViewController(offlineViewController, animated: false, completion: nil)
         }
     }
     
