@@ -13,14 +13,14 @@ class FetchPutioTask {
     
     let fetchFilesURL: String
     var isTaskRunning: Bool
-    var isCancelled: Bool
+    var downloadProgress: Float
     
     static let sharedInstance = FetchPutioTask()
     
     private init() {
         self.fetchFilesURL = "https://api.put.io/v2/files/list"
         self.isTaskRunning = false
-        self.isCancelled = false
+        self.downloadProgress = 0.0
     }
     
     func getApiURL (parent: File?, accessToken: String) -> NSURL {
@@ -80,7 +80,9 @@ class FetchPutioTask {
         downloadTask.resume()
     }
     
-    func downloadFile(file: File, onFileDownloadSuccess: () -> Void, onFileDownloadError: (NSError) -> Void, onFileDownloadProgress: (Float, Float) -> Void) {
+    func downloadFile(file: File) -> Void {
+        
+        self.isTaskRunning = true
         
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
         Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
@@ -88,14 +90,15 @@ class FetchPutioTask {
                 // This closure is NOT called on the main queue for performance
                 // reasons. To update your ui, dispatch to the main queue.
                 dispatch_async(dispatch_get_main_queue()) {
-                    onFileDownloadProgress(Float(totalBytesRead), Float(totalBytesExpectedToRead))
+                    self.downloadProgress = Float(totalBytesRead) / Float(totalBytesExpectedToRead)
                 }
             }
             .response { _, _, _, error in
+                self.isTaskRunning = false
                 if let error = error {
-                    onFileDownloadError(error)
+                    print("Failed with error: \(error)")
                 } else {
-                    onFileDownloadSuccess()
+                    print("File downloaded successfully: \(file.getName())")
                 }
         }
     }

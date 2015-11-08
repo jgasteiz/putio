@@ -61,30 +61,8 @@ class FileDetailViewController: UIViewController {
             playButton.setTitle("View in WebView", forState: UIControlState.Normal)
         }
         
-        // Try to create it if it doesn't exist.
-        let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        do {
-            try fileManager.createDirectoryAtURL(documentsDirectory, withIntermediateDirectories: false, attributes: nil)
-        } catch {
-            print("Failed creating downloads directory")
-        }
-        
-        // If the file is downloaded, remove the "Download" button.
-        if file!.isFileOffline() {
-            downloadButton.hidden = true
-        }
-        // Otherwise remove the "Delete download" button.
-        else {
-            deleteButton.hidden = true
-        }
-        
-        if (fetchPutioTask.isTaskRunning) {
-            animateActivityIndicator()
-            // check status of the task every second
-            self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: Selector("checkDownloadStatus"), userInfo: nil, repeats: true)
-        } else {
-            cancelDownload.hidden = true
-        }
+        // Check if there's a task running in the background.
+        checkDownloadStatus()
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,8 +97,8 @@ class FileDetailViewController: UIViewController {
         }
         
         // Save file.
-        animateActivityIndicator()
-        fetchPutioTask.downloadFile(file!, onFileDownloadSuccess: onFileDownloadSuccess, onFileDownloadError: onFileDownloadError, onFileDownloadProgress: onFileDownloadProgress)
+        fetchPutioTask.downloadFile(file!)
+        checkDownloadStatus()
     }
     
     @IBAction func deleteFile(sender: AnyObject) {
@@ -140,28 +118,12 @@ class FileDetailViewController: UIViewController {
     }
     
     @IBAction func cancelDownload(sender: AnyObject) {
-        stopActivityIndicator()
+        hideProgressView()
         fetchPutioTask.isTaskRunning = false
         deleteFile(sender)
     }
     
-    func onFileDownloadSuccess() {
-        print("File downloaded successfully: \(self.file!.getName())")
-        
-        self.stopActivityIndicator()
-    }
-    
-    func onFileDownloadError(error: NSError) {
-        print("Failed with error: \(error)")
-    }
-    
-    func onFileDownloadProgress(totalBytesRead: Float, totalBytesExpectedToRead: Float) {
-        print("Total bytes read on main queue: \(totalBytesRead)/\(totalBytesExpectedToRead)")
-        let progress = totalBytesRead / totalBytesExpectedToRead
-        self.progressView.setProgress(progress, animated: true)
-    }
-    
-    func animateActivityIndicator() {
+    func showProgressView() -> Void {
         progressView.setProgress(0, animated: false)
         progressView.hidden = false
         cancelDownload.hidden = false
@@ -169,12 +131,26 @@ class FileDetailViewController: UIViewController {
         deleteButton.hidden = true
     }
     
-    func stopActivityIndicator() {
+    func hideProgressView() -> Void {
         progressView.setProgress(0, animated: false)
         progressView.hidden = true
-        downloadButton.hidden = true
         cancelDownload.hidden = true
-        deleteButton.hidden = false
+        
+        // Depending on the file status, show/hide download controls.
+        showDownloadControls()
+    }
+    
+    func showDownloadControls() -> Void {
+        // If the file is downloaded, remove the "Download" button.
+        if file!.isFileOffline() {
+            downloadButton.hidden = true
+            deleteButton.hidden = false
+        }
+        // Otherwise remove the "Delete download" button.
+        else {
+            deleteButton.hidden = true
+            downloadButton.hidden = false
+        }
     }
     
     func notifyUser(message: String) -> Void {
@@ -185,9 +161,23 @@ class FileDetailViewController: UIViewController {
     }
     
     func checkDownloadStatus() -> Void {
-        print("Checking download status")
-        if (!fetchPutioTask.isTaskRunning) {
-            stopActivityIndicator()
+        // Depending on the file status, show/hide download controls.
+        showDownloadControls()
+        
+        // check status of the task every second
+        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: Selector("updateProgressView"), userInfo: nil, repeats: true)
+        self.statusCheckTimer?.fire()
+    }
+    
+    func updateProgressView() -> Void {
+        if (fetchPutioTask.isTaskRunning) {
+            if progressView.hidden == true {
+                showProgressView()
+            }
+            print("Download status at \(fetchPutioTask.downloadProgress * 100)%")
+            self.progressView.setProgress(fetchPutioTask.downloadProgress, animated: true)
+        } else {
+            hideProgressView()
             self.statusCheckTimer!.invalidate()
         }
     }

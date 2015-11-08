@@ -149,7 +149,7 @@
                                     <action selector="deleteFile:" destination="GzM-2G-9hg" eventType="touchUpInside" id="Vf0-EK-WQR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yHl-q3-lVc">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yHl-q3-lVc">
                                 <rect key="frame" x="241" y="531" width="118" height="30"/>
                                 <animations/>
                                 <state key="normal" title="Cancel download"/>
