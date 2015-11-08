@@ -118,7 +118,7 @@ class FileDetailViewController: UIViewController {
     }
     
     @IBAction func cancelDownload(sender: AnyObject) {
-        fetchPutioTask.cancelDownload()
+        fetchPutioTask.cancelDownload(self.file!)
         self.statusCheckTimer!.invalidate()
         checkDownloadStatus()
     }
@@ -170,12 +170,13 @@ class FileDetailViewController: UIViewController {
     }
     
     func updateProgressView() -> Void {
-        if (fetchPutioTask.isTaskRunning) {
+        if fetchPutioTask.isTaskRunning(file!) {
             if progressView.hidden == true {
                 showProgressView()
             }
-            print("Download status at \(fetchPutioTask.downloadProgress * 100)%")
-            self.progressView.setProgress(fetchPutioTask.downloadProgress, animated: true)
+            let downloadProgress = fetchPutioTask.getDownloadProgress(file!)
+            print("Download status at \(downloadProgress * 100)%")
+            self.progressView.setProgress(downloadProgress, animated: true)
         } else {
             hideProgressView()
             self.statusCheckTimer!.invalidate()

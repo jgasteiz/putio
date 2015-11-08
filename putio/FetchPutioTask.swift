@@ -12,8 +12,8 @@ import Alamofire
 class FetchPutioTask {
     
     let fetchFilesURL: String
-    var isTaskRunning: Bool
-    var downloadProgress: Float
+    
+    var downloads: Dictionary<Int, Dictionary<String, AnyObject>>
     
     var request: Alamofire.Request?
     
@@ -21,8 +21,7 @@ class FetchPutioTask {
     
     private init() {
         self.fetchFilesURL = "https://api.put.io/v2/files/list"
-        self.isTaskRunning = false
-        self.downloadProgress = 0.0
+        self.downloads = [Int: Dictionary]()
     }
     
     func getApiURL (parent: File?, accessToken: String) -> NSURL {
@@ -84,31 +83,51 @@ class FetchPutioTask {
     
     func downloadFile(file: File) -> Void {
         
-        self.isTaskRunning = true
-        self.downloadProgress = 0.0
+        self.initializeDownload(file)
         
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
-        self.request = Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
+        self.downloads[file.getId()]!["request"] = Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
             .progress { bytesRead, totalBytesRead, totalBytesExpectedToRead in
                 // This closure is NOT called on the main queue for performance
                 // reasons. To update your ui, dispatch to the main queue.
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.downloadProgress = Float(totalBytesRead) / Float(totalBytesExpectedToRead)
+                    self.updateDownloadProgress(file, downloadProgress: Float(totalBytesRead) / Float(totalBytesExpectedToRead))
                 }
             }
             .response { _, _, _, error in
-                self.isTaskRunning = false
                 if let error = error {
                     print("Failed with error: \(error)")
                 } else {
                     print("File downloaded successfully: \(file.getName()) at \(file.getOfflineURL().path)")
                 }
+                self.finalizeDowload(file)
         }
     }
     
-    func cancelDownload() -> Void {
-        self.request?.cancel()
-        self.downloadProgress = 0.0
-        self.isTaskRunning = false
+    func cancelDownload(file: File) -> Void {
+        let request = self.downloads[file.getId()]!["request"] as! Alamofire.Request
+        request.cancel()
+        finalizeDowload(file)
     }
+    
+    func finalizeDowload(file: File) -> Void {
+        self.downloads[file.getId()] = ["downloadProgress": 0.0, "taskRunning": false]
+    }
+    
+    func initializeDownload(file: File) -> Void {
+        self.downloads[file.getId()] = ["downloadProgress": 0.0, "taskRunning": true]
+    }
+    
+    func updateDownloadProgress(file: File, downloadProgress: Float) -> Void {
+        self.downloads[file.getId()]!["downloadProgress"] = downloadProgress
+    }
+    
+    func getDownloadProgress(file: File) -> Float {
+        return self.downloads[file.getId()]!["downloadProgress"] as! Float
+    }
+    
+    func isTaskRunning(file: File) -> Bool {
+        return self.downloads[file.getId()] != nil && self.downloads[file.getId()]!["taskRunning"] as? Bool == true
+    }
+
 }
