@@ -15,6 +15,8 @@ class FetchPutioTask {
     var isTaskRunning: Bool
     var downloadProgress: Float
     
+    var request: Alamofire.Request?
+    
     static let sharedInstance = FetchPutioTask()
     
     private init() {
@@ -83,9 +85,10 @@ class FetchPutioTask {
     func downloadFile(file: File) -> Void {
         
         self.isTaskRunning = true
+        self.downloadProgress = 0.0
         
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
-        Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
+        self.request = Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
             .progress { bytesRead, totalBytesRead, totalBytesExpectedToRead in
                 // This closure is NOT called on the main queue for performance
                 // reasons. To update your ui, dispatch to the main queue.
@@ -98,8 +101,14 @@ class FetchPutioTask {
                 if let error = error {
                     print("Failed with error: \(error)")
                 } else {
-                    print("File downloaded successfully: \(file.getName())")
+                    print("File downloaded successfully: \(file.getName()) at \(file.getOfflineURL().path)")
                 }
         }
+    }
+    
+    func cancelDownload() -> Void {
+        self.request?.cancel()
+        self.downloadProgress = 0.0
+        self.isTaskRunning = false
     }
 }

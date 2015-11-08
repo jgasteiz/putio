@@ -118,9 +118,9 @@ class FileDetailViewController: UIViewController {
     }
     
     @IBAction func cancelDownload(sender: AnyObject) {
-        hideProgressView()
-        fetchPutioTask.isTaskRunning = false
-        deleteFile(sender)
+        fetchPutioTask.cancelDownload()
+        self.statusCheckTimer!.invalidate()
+        checkDownloadStatus()
     }
     
     func showProgressView() -> Void {
@@ -165,7 +165,7 @@ class FileDetailViewController: UIViewController {
         showDownloadControls()
         
         // check status of the task every second
-        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: Selector("updateProgressView"), userInfo: nil, repeats: true)
+        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target:self, selector: Selector("updateProgressView"), userInfo: nil, repeats: true)
         self.statusCheckTimer?.fire()
     }
     
