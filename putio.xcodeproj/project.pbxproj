@@ -183,7 +183,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		59B751C01BE677DF0048513C /* ViewControllers */ = {
+		59B751C01BE677DF0048513C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				59B751C11BE677F50048513C /* FileDetailViewController.swift */,
@@ -192,7 +192,7 @@
 				59DCE51C1BE5576800087EA8 /* WebViewViewController.swift */,
 				597D306D1BEFA12900504B04 /* OfflineViewController.swift */,
 			);
-			name = ViewControllers;
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 		59B751C51BE69BF70048513C /* Layout */ = {
@@ -256,7 +256,7 @@
 				59B751C51BE69BF70048513C /* Layout */,
 				59B751C61BE69C080048513C /* Models */,
 				59B751C71BE69C100048513C /* Tasks */,
-				59B751C01BE677DF0048513C /* ViewControllers */,
+				59B751C01BE677DF0048513C /* Controllers */,
 				59D1DFCB1BE4C1390074A7C6 /* AppDelegate.swift */,
 				59D1DFCF1BE4C1390074A7C6 /* Main.storyboard */,
 				59D1DFD51BE4C1390074A7C6 /* Assets.xcassets */,

@@ -55,17 +55,12 @@ class FileListViewController: UITableViewController {
         
         // Get the access token from the preferences.
         accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String
-        
-        // Fetch the files and directories in the current directory.
-        getDirectoryFiles()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    func getDirectoryFiles() {
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // Fetch the files and directories in the current directory.
         activityIndicator!.startAnimating()
         fetchPutioTask.fetchDirectoryFiles(parent, accessToken: accessToken!, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
     }

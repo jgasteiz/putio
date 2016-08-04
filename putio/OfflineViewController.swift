@@ -35,20 +35,12 @@ class OfflineViewController: UITableViewController {
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "LabelCell")
         tableView.estimatedRowHeight = 64
         tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         // Fetch the files and directories in the current directory.
-        getOfflineFiles()
-    }
-    @IBAction func refreshOffineFiles(sender: AnyObject) {
-        getOfflineFiles()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    func getOfflineFiles() -> Void {
         fileList = fetchPutioTask.getOfflineFiles()
         tableView.reloadData()
     }

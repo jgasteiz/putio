@@ -21,7 +21,7 @@ class FetchPutioTask {
     
     private init() {
         self.fetchFilesURL = "https://api.put.io/v2/files/list"
-        self.downloads = [Int: Dictionary]()
+        self.downloads = [Int: Dictionary<String, AnyObject>]()
     }
     
     func getApiURL (parent: File?, accessToken: String) -> NSURL {
