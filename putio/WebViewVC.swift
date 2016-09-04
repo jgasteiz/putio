@@ -1,5 +1,5 @@
 //
-//  FileViewController.swift
+//  WebViewVC.swift
 //  putio
 //
 //  Created by Javi Manzano on 31/10/2015.

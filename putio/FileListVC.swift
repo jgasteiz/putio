@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FileListVC.swift
 //  putio
 //
 //  Created by Javi Manzano on 31/10/2015.

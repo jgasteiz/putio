@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  LoginVC.swift
 //  putio
 //
 //  Created by Javi Manzano on 01/11/2015.
