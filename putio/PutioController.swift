@@ -1,5 +1,5 @@
 //
-//  FetchFilesTask.swift
+//  PutioController.swift
 //  putio
 //
 //  Created by Javi Manzano on 31/10/2015.
@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-class FetchPutioTask {
+class PutioController {
     
     let fetchFilesURL: String
     
@@ -17,7 +17,7 @@ class FetchPutioTask {
     
     var request: Alamofire.Request?
     
-    static let sharedInstance = FetchPutioTask()
+    static let sharedInstance = PutioController()
     
     private init() {
         self.fetchFilesURL = "https://api.put.io/v2/files/list"
@@ -98,7 +98,7 @@ class FetchPutioTask {
                 if let error = error {
                     print("Failed with error: \(error)")
                 } else {
-                    print("File downloaded successfully: \(file.getName()) at \(file.getOfflineURL().path)")
+                    print("File downloaded successfully: \(file.getName())")
                 }
                 self.finalizeDowload(file)
         }

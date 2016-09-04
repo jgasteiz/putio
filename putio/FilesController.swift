@@ -10,9 +10,10 @@ import Foundation
 
 class FilesController {
     
+    let fileManager = NSFileManager.defaultManager()
+    
     func getOfflineFiles() -> [File] {
         var fileList: [File] = []
-        let fileManager = NSFileManager.defaultManager()
         let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentsURL = paths[0]
         do {
@@ -36,9 +37,25 @@ class FilesController {
     func deleteFile (file file: File) {
         let fileManager = NSFileManager.defaultManager()
         do {
-            try fileManager.removeItemAtURL(file.getOfflineURL())
+            try fileManager.removeItemAtURL(getFileOfflineURL(file: file))
         } catch {
             print("There was an error deleting \(file.getOfflineFileName())")
         }
+    }
+    
+    func isFileOffline(file file: File) -> Bool {
+        return fileManager.fileExistsAtPath(getFileOfflineURL(file: file).path!)
+    }
+    
+    func getFilePlaybackURL(file file: File) -> NSURL {
+        if self.isFileOffline(file: file) {
+            return getFileOfflineURL(file: file)
+        }
+        return file.getDownloadURL()
+    }
+    
+    func getFileOfflineURL(file file: File) -> NSURL {
+        let documentsDirectory = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+        return documentsDirectory.URLByAppendingPathComponent(file.getOfflineFileName())
     }
 }

@@ -12,16 +12,19 @@ class WebViewVC: UIViewController {
     
     var file: File? = nil
     
+    let filesController = FilesController()
+    
     @IBOutlet weak var webView: UIWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        self.navigationItem.title = self.file!.getName()
-        
-        let url : NSURL! = file!.getDownloadURL()
-        webView.loadRequest(NSURLRequest(URL: url))
+
+        if let file = file {
+            self.navigationItem.title = file.getName()
+            
+            let url : NSURL! = file.getDownloadURL()
+            webView.loadRequest(NSURLRequest(URL: url))
+        }
     }
     
     override func didReceiveMemoryWarning() {

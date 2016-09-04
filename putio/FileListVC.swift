@@ -16,7 +16,7 @@ class FileListVC: UITableViewController {
     let fileDetailViewControllerId = "FileDetailViewController"
     
     // Fetch task
-    var fetchPutioTask: FetchPutioTask = FetchPutioTask.sharedInstance
+    var putioController = PutioController.sharedInstance
     
     // Access token for api access
     var accessToken: String?
@@ -62,7 +62,7 @@ class FileListVC: UITableViewController {
         
         // Fetch the files and directories in the current directory.
         activityIndicator!.startAnimating()
-        fetchPutioTask.fetchDirectoryFiles(parent, accessToken: accessToken!, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
+        putioController.fetchDirectoryFiles(parent, accessToken: accessToken!, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
     }
 
     func onFilesLoadSuccess(files: [File]) {

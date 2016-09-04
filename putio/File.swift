@@ -92,22 +92,20 @@ class File {
         }
     }
     
+    func getDownloadURL() -> NSURL {
+        if getHasMp4() {
+            return NSURL(string: "https://api.put.io/v2/files/\(getId())/mp4/download?oauth_token=6HVUGYDO")!
+        } else {
+            return NSURL(string: "https://api.put.io/v2/files/\(getId())/download?oauth_token=6HVUGYDO")!
+        }
+    }
+    
     func getFileExtension() -> String {
         return self.fileExtension != nil ? self.fileExtension! : ""
     }
     
     func getOfflineFileName() -> String {
         return self.getName()
-    }
-    
-    func getOfflineURL() -> NSURL {
-        let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        return documentsDirectory.URLByAppendingPathComponent(self.getOfflineFileName())
-    }
-    
-    func isFileOffline() -> Bool {
-        let fileManager = NSFileManager.defaultManager()
-        return fileManager.fileExistsAtPath(self.getOfflineURL().path!)
     }
     
     func isDirectory() -> Bool {
@@ -128,21 +126,6 @@ class File {
     
     func isVideo() -> Bool {
         return self.getContentType().containsString("video")
-    }
-    
-    func getPlaybackURL() -> NSURL {
-        if self.isFileOffline() {
-            return self.getOfflineURL()
-        }
-        return self.getDownloadURL()
-    }
-    
-    func getDownloadURL() -> NSURL {
-        if self.getHasMp4() {
-            return NSURL(string: "https://api.put.io/v2/files/\(self.getId())/mp4/download?oauth_token=6HVUGYDO")!
-        } else {
-            return NSURL(string: "https://api.put.io/v2/files/\(self.getId())/download?oauth_token=6HVUGYDO")!
-        }
     }
     
 }

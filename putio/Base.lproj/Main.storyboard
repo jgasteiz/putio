@@ -340,7 +340,7 @@
                             <outlet property="delegate" destination="HZ2-z0-UW7" id="Xrj-ie-w8E"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="QIp-sG-oHQ"/>
+                    <navigationItem key="navigationItem" title="Downloaded items" id="QIp-sG-oHQ"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2k-PT-XWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

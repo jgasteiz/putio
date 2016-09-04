@@ -19,19 +19,11 @@ class OfflineVC: UITableViewController {
     
     let filesController = FilesController()
     
-    // Fetch task
-    var fetchPutioTask: FetchPutioTask = FetchPutioTask.sharedInstance
-    
     // List of files and directories
     var fileList: [File] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationItem.title = "Downloaded items"
-        
-        // Plain back button
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         
         // Set table cells automatic height
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "LabelCell")
@@ -55,11 +47,10 @@ extension OfflineVC {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let indexPath = self.tableView.indexPathForSelectedRow as NSIndexPath! {
-            
-            let file = fileList[indexPath.row]
-            
             let vc = self.storyboard?.instantiateViewControllerWithIdentifier("MediaViewController") as! AVPlayerViewController
-            vc.player = AVPlayer(URL: file.getPlaybackURL())
+            
+            vc.player = AVPlayer(URL: filesController.getFilePlaybackURL(file: fileList[indexPath.row]))
+            
             self.presentViewController(vc, animated: true, completion: nil)
         }
     }
