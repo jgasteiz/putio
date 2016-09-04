@@ -17,6 +17,8 @@ class OfflineVC: UITableViewController {
     let viewControllerId = "FileListViewController"
     let fileDetailViewControllerId = "FileDetailViewController"
     
+    let filesController = FilesController()
+    
     // Fetch task
     var fetchPutioTask: FetchPutioTask = FetchPutioTask.sharedInstance
     
@@ -41,7 +43,7 @@ class OfflineVC: UITableViewController {
         super.viewDidAppear(animated)
         
         // Fetch the files and directories in the current directory.
-        fileList = fetchPutioTask.getOfflineFiles()
+        fileList = filesController.getOfflineFiles()
         tableView.reloadData()
     }
 }

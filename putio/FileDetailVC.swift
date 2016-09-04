@@ -17,6 +17,8 @@ class FileDetailVC: UIViewController {
     
     var file: File? = nil
     
+    let filesController = FilesController()
+    
     var statusCheckTimer: NSTimer?
     
     let webViewSegueId = "ShowWebView"
@@ -99,19 +101,17 @@ class FileDetailVC: UIViewController {
     
     @IBAction func deleteFile(sender: AnyObject) {
         // If the file hasn't been downloaded yet, don't continue.
-        if !file!.isFileOffline() {
-            notifyUser("This file hasn't been downloaded yet.")
-            return
+        if let file = file {
+            if !file.isFileOffline() {
+                notifyUser("This file hasn't been downloaded yet.")
+                return
+            }
+            
+            filesController.deleteFile(file: file)
+            
+            deleteButton.hidden = true
+            downloadButton.hidden = false
         }
-        
-        let fileManager = NSFileManager.defaultManager()
-        do {
-            try fileManager.removeItemAtURL(file!.getOfflineURL())
-        } catch {
-            print("There was an error deleting \(file!.getOfflineFileName())")
-        }
-        deleteButton.hidden = true
-        downloadButton.hidden = false
     }
     
     @IBAction func cancelDownload(sender: AnyObject) {
@@ -162,7 +162,7 @@ class FileDetailVC: UIViewController {
         showDownloadControls()
         
         // check status of the task every second
-        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target:self, selector: #selector(FileDetailViewController.updateProgressView), userInfo: nil, repeats: true)
+        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target:self, selector: #selector(FileDetailVC.updateProgressView), userInfo: nil, repeats: true)
         self.statusCheckTimer?.fire()
     }
     

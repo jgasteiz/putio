@@ -104,28 +104,7 @@ class FetchPutioTask {
         }
     }
     
-    func getOfflineFiles() -> [File] {
-        var fileList: [File] = []
-        let fileManager = NSFileManager.defaultManager()
-        let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        let documentsURL = paths[0]
-        do {
-            let urlList = try fileManager.contentsOfDirectoryAtURL(documentsURL, includingPropertiesForKeys: nil, options: .SkipsPackageDescendants)
-            for url in urlList {
-                let path = url.path
-                if path != nil {
-                    let pathComponents = path!.characters.split{$0 == "/"}.map(String.init)
-                    let fileName = pathComponents.last
-                    if (fileName!.containsString("mp4")) {
-                        fileList.append(File(id: 0, name: fileName, parentId: -1, thumbnail: nil, contentType: "video", createdAt: nil, hasMp4: true, size: -1, fileExtension: "mp4"))
-                    }
-                }
-            }
-        } catch {
-            return fileList
-        }
-        return fileList
-    }
+    
     
     func cancelDownload(file: File) -> Void {
         let request = self.downloads[file.getId()]!["request"] as! Alamofire.Request
