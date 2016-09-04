@@ -20,8 +20,20 @@ class File {
     var hasMp4: Bool?
     var size: Int?
     var fileExtension: String?
+    var accessToken: String?
     
-    init(id: Int?, name: String?, parentId: Int?, thumbnail: String?, contentType: String?, createdAt: String?, hasMp4: Bool?, size: Int?, fileExtension: String?) {
+    init(
+        id: Int?,
+        name: String?,
+        parentId: Int?,
+        thumbnail: String?,
+        contentType: String?,
+        createdAt: String?,
+        hasMp4: Bool?,
+        size: Int?,
+        fileExtension: String?,
+        accessToken: String?
+    ) {
         self.id = id
         self.name = name
         self.parentId = parentId
@@ -31,6 +43,7 @@ class File {
         self.hasMp4 = hasMp4
         self.size = size
         self.fileExtension = fileExtension
+        self.accessToken = accessToken
     }
     
     ////////////////////////////
@@ -93,10 +106,13 @@ class File {
     }
     
     func getDownloadURL() -> NSURL {
+        guard let accessToken = accessToken else {
+            return NSURL()
+        }
         if getHasMp4() {
-            return NSURL(string: "https://api.put.io/v2/files/\(getId())/mp4/download?oauth_token=6HVUGYDO")!
+            return NSURL(string: "https://api.put.io/v2/files/\(getId())/mp4/download?oauth_token=\(accessToken)")!
         } else {
-            return NSURL(string: "https://api.put.io/v2/files/\(getId())/download?oauth_token=6HVUGYDO")!
+            return NSURL(string: "https://api.put.io/v2/files/\(getId())/download?oauth_token=\(accessToken)")!
         }
     }
     

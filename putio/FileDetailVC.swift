@@ -106,7 +106,10 @@ class FileDetailVC: UIViewController {
             }
             
             // Save the file for offline use.
-            putioController.downloadFile(file)
+            putioController.downloadFile(
+                file: file,
+                downloadURL: file.getDownloadURL()
+            )
             checkDownloadStatus()
         }
     }

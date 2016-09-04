@@ -18,9 +18,6 @@ class FileListVC: UITableViewController {
     // Fetch task
     var putioController = PutioController.sharedInstance
     
-    // Access token for api access
-    var accessToken: String?
-    
     // This won't be null if we're not in the root.
     var parent: File?
     
@@ -52,9 +49,6 @@ class FileListVC: UITableViewController {
         activityIndicator!.hidesWhenStopped = true
         activityIndicator!.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator!)
-        
-        // Get the access token from the preferences.
-        accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -62,7 +56,7 @@ class FileListVC: UITableViewController {
         
         // Fetch the files and directories in the current directory.
         activityIndicator!.startAnimating()
-        putioController.fetchDirectoryFiles(parent, accessToken: accessToken!, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
+        putioController.fetchDirectoryFiles(parent, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
     }
 
     func onFilesLoadSuccess(files: [File]) {

@@ -16,6 +16,9 @@ class FilesController {
         var fileList: [File] = []
         let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentsURL = paths[0]
+        
+        let accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String
+        
         do {
             let urlList = try fileManager.contentsOfDirectoryAtURL(documentsURL, includingPropertiesForKeys: nil, options: .SkipsPackageDescendants)
             for url in urlList {
@@ -24,7 +27,19 @@ class FilesController {
                     let pathComponents = path!.characters.split{$0 == "/"}.map(String.init)
                     let fileName = pathComponents.last
                     if (fileName!.containsString("mp4")) {
-                        fileList.append(File(id: 0, name: fileName, parentId: -1, thumbnail: nil, contentType: "video", createdAt: nil, hasMp4: true, size: -1, fileExtension: "mp4"))
+                        fileList.append(
+                            File(
+                                id: 0,
+                                name: fileName,
+                                parentId: -1,
+                                thumbnail: nil,
+                                contentType: "video",
+                                createdAt: nil,
+                                hasMp4: true,
+                                size: -1,
+                                fileExtension: "mp4",
+                                accessToken: accessToken
+                            ))
                     }
                 }
             }

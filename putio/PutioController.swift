@@ -20,8 +20,8 @@ class PutioController {
     static let sharedInstance = PutioController()
     
     private init() {
-        self.fetchFilesURL = "https://api.put.io/v2/files/list"
-        self.downloads = [Int: Dictionary<String, AnyObject>]()
+        fetchFilesURL = "https://api.put.io/v2/files/list"
+        downloads = [Int: Dictionary<String, AnyObject>]()
     }
     
     func getApiURL (parent: File?, accessToken: String) -> NSURL {
@@ -32,61 +32,65 @@ class PutioController {
         }
     }
     
-    func fetchDirectoryFiles(parent: File?, accessToken: String, onTaskDone: ([File]) -> Void, onTaskError: () -> Void) {
+    func fetchDirectoryFiles(parent: File?, onTaskDone: ([File]) -> Void, onTaskError: () -> Void) {
+        let accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String
         
-        let apiURL = getApiURL(parent, accessToken: accessToken)
-
-        // Get the top stories
-        let sharedSession = NSURLSession.sharedSession()
-        let downloadTask: NSURLSessionDownloadTask = sharedSession.downloadTaskWithURL(apiURL, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+        if let accessToken = accessToken {
+            let apiURL = getApiURL(parent, accessToken: accessToken)
             
-            if error == nil {
-                // Get the url content as NSData
-                let dataObject = NSData(contentsOfURL: location!)
+            // Get the top stories
+            let sharedSession = NSURLSession.sharedSession()
+            let downloadTask: NSURLSessionDownloadTask = sharedSession.downloadTaskWithURL(apiURL, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
                 
-                // Get the files
-                var files: [File] = []
-                
-                let responseJson: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(dataObject!, options: [])) as! NSDictionary
-                let filesArray: NSArray = responseJson["files"] as! NSArray
-                
-                // Add the fetched stories to the array
-                for fileDict in filesArray {
-                    files.append(File(
-                        id: fileDict["id"] as? Int,
-                        name: fileDict["name"] as? String,
-                        parentId: fileDict["parent_id"] as? Int,
-                        thumbnail: fileDict["screenshot"] as? String,
-                        contentType: fileDict["content_type"] as? String,
-                        createdAt: fileDict["created_at"] as? String,
-                        hasMp4: fileDict["is_mp4_available"] as? Bool,
-                        size: fileDict["size"] as? Int,
-                        fileExtension: fileDict["extension"] as? String
-                    ))
+                if error == nil {
+                    // Get the url content as NSData
+                    let dataObject = NSData(contentsOfURL: location!)
+                    
+                    // Get the files
+                    var files: [File] = []
+                    
+                    let responseJson: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(dataObject!, options: [])) as! NSDictionary
+                    let filesArray: NSArray = responseJson["files"] as! NSArray
+                    
+                    // Add the fetched stories to the array
+                    for fileDict in filesArray {
+                        files.append(File(
+                            id: fileDict["id"] as? Int,
+                            name: fileDict["name"] as? String,
+                            parentId: fileDict["parent_id"] as? Int,
+                            thumbnail: fileDict["screenshot"] as? String,
+                            contentType: fileDict["content_type"] as? String,
+                            createdAt: fileDict["created_at"] as? String,
+                            hasMp4: fileDict["is_mp4_available"] as? Bool,
+                            size: fileDict["size"] as? Int,
+                            fileExtension: fileDict["extension"] as? String,
+                            accessToken: accessToken
+                        ))
+                    }
+                    
+                    // Perform the dispatch async with the fetched stories
+                    // and the boolean value of firstThirtyStories.
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        onTaskDone(files)
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        onTaskError()
+                    })
                 }
-                
-                // Perform the dispatch async with the fetched stories
-                // and the boolean value of firstThirtyStories.
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    onTaskDone(files)
-                })
-            } else {
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    onTaskError()
-                })
-            }
-        })
-        
-        // Perform the API call.
-        downloadTask.resume()
+            })
+            
+            // Perform the API call.
+            downloadTask.resume()
+        }
     }
     
-    func downloadFile(file: File) -> Void {
+    func downloadFile(file file: File, downloadURL: NSURL) -> Void {
         
         self.initializeDownload(file)
         
         let destination = Alamofire.Request.suggestedDownloadDestination(directory: .DocumentDirectory, domain: .UserDomainMask)
-        self.downloads[file.getId()]!["request"] = Alamofire.download(Alamofire.Method.GET, file.getDownloadURL(), destination: destination)
+        self.downloads[file.getId()]!["request"] = Alamofire.download(Alamofire.Method.GET, downloadURL, destination: destination)
             .progress { bytesRead, totalBytesRead, totalBytesExpectedToRead in
                 // This closure is NOT called on the main queue for performance
                 // reasons. To update your ui, dispatch to the main queue.
