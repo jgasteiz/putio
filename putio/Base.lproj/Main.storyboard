@@ -60,7 +60,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="blP-KA-tlR"/>
                     <connections>
-                        <segue destination="GzM-2G-9hg" kind="show" id="18w-2c-GFn"/>
+                        <segue destination="GzM-2G-9hg" kind="show" identifier="ShowFileDetail" id="18w-2c-GFn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MuQ-kh-lLg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -195,7 +195,7 @@
                         <outlet property="imageView" destination="yKV-Yf-bmO" id="T6r-Pj-tmM"/>
                         <outlet property="playButton" destination="m68-9d-aV9" id="x3b-MH-6Eo"/>
                         <outlet property="progressView" destination="8oe-JA-ewK" id="f6f-nw-7vk"/>
-                        <segue destination="P9a-n4-9aL" kind="show" identifier="showWeb" id="gzg-cX-GYI"/>
+                        <segue destination="P9a-n4-9aL" kind="show" identifier="ShowWebView" id="gzg-cX-GYI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1lM-L4-9bd" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -214,8 +214,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vng-I6-4AH">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vng-I6-4AH">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                             </webView>
                         </subviews>
@@ -234,7 +234,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZx-xs-e0Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4546" y="1352"/>
+            <point key="canvasLocation" x="4514" y="1649"/>
         </scene>
         <!--AV Player View Controller-->
         <scene sceneID="5Eh-9C-IEA">
@@ -242,7 +242,7 @@
                 <avPlayerViewController storyboardIdentifier="MediaViewController" videoGravity="AVLayerVideoGravityResizeAspect" id="Eih-vz-fqq" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RnN-5P-ake" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4622" y="2338"/>
+            <point key="canvasLocation" x="3709" y="2370"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="SyH-e0-L2d">
@@ -326,7 +326,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="LabelCell" selectionStyle="default" indentationWidth="10" id="EAx-mg-6Gm">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="LabelCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="OfflineFileCell" id="EAx-mg-6Gm">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EAx-mg-6Gm" id="jjK-G6-Tji">
@@ -344,7 +344,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K2k-PT-XWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2829" y="2370"/>
+            <point key="canvasLocation" x="2848" y="2370"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="NfA-Jq-9Cv">

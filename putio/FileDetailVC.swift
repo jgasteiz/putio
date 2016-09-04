@@ -19,8 +19,7 @@ class FileDetailViewController: UIViewController {
     
     var statusCheckTimer: NSTimer?
     
-    let webViewSegueId = "showWeb"
-    let mediaSegueId = "showMedia"
+    let webViewSegueId = "ShowWebView"
     
     @IBOutlet weak var fileName: UILabel!
     @IBOutlet weak var fileSize: UILabel!
@@ -163,7 +162,7 @@ class FileDetailViewController: UIViewController {
         showDownloadControls()
         
         // check status of the task every second
-        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target:self, selector: Selector("updateProgressView"), userInfo: nil, repeats: true)
+        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target:self, selector: #selector(FileDetailViewController.updateProgressView), userInfo: nil, repeats: true)
         self.statusCheckTimer?.fire()
     }
     
