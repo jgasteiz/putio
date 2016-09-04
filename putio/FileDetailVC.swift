@@ -62,6 +62,9 @@ class FileDetailVC: UIViewController {
         } else {
             playButton.setTitle("View in WebView", forState: UIControlState.Normal)
         }
+        
+        // Check if there's a task running in the background.
+        checkDownloadStatus()
     }
     
     override func viewDidAppear(animated: Bool) {
