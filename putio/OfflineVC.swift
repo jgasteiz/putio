@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
-class OfflineViewController: UITableViewController {
+class OfflineVC: UITableViewController {
     
     // Ids
     let cellId = "LabelCell"
@@ -46,7 +46,7 @@ class OfflineViewController: UITableViewController {
     }
 }
 
-extension OfflineViewController {
+extension OfflineVC {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fileList.count
     }

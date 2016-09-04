@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FileListViewController: UITableViewController {
+class FileListVC: UITableViewController {
     
     // Ids
     let fileCellId = "FileCell"
@@ -88,7 +88,7 @@ class FileListViewController: UITableViewController {
     }
 }
 
-extension FileListViewController {
+extension FileListVC {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fileList.count;
     }
@@ -100,11 +100,11 @@ extension FileListViewController {
 
             // If it's a directory, open it.
             if file.getContentType() == "application/x-directory" {
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(viewControllerId) as! FileListViewController
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(viewControllerId) as! FileListVC
                 vc.parent = file
                 self.navigationController?.pushViewController(vc, animated: true)
             } else {
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(fileDetailViewControllerId) as! FileDetailViewController
+                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(fileDetailViewControllerId) as! FileDetailVC
                 vc.file = file
                 self.navigationController?.pushViewController(vc, animated: true)
             }

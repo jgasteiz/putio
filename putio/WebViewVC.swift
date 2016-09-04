@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WebViewViewController: UIViewController {
+class WebViewVC: UIViewController {
     
     var file: File? = nil
     

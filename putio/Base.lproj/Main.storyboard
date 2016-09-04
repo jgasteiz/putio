@@ -7,10 +7,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--File List View Controller-->
+        <!--File ListVC-->
         <scene sceneID="bq2-Rg-BqW">
             <objects>
-                <tableViewController storyboardIdentifier="FileListViewController" id="Xds-j9-Mwz" customClass="FileListViewController" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FileListViewController" id="Xds-j9-Mwz" customClass="FileListVC" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" id="grw-qU-Qcm">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -67,10 +67,10 @@
             </objects>
             <point key="canvasLocation" x="2848" y="1649"/>
         </scene>
-        <!--File Detail View Controller-->
+        <!--File DetailVC-->
         <scene sceneID="f1Q-WW-srW">
             <objects>
-                <viewController storyboardIdentifier="FileDetailViewController" id="GzM-2G-9hg" customClass="FileDetailViewController" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FileDetailViewController" id="GzM-2G-9hg" customClass="FileDetailVC" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wJf-LC-nUg"/>
                         <viewControllerLayoutGuide type="bottom" id="IWc-Ma-PxG"/>
@@ -202,10 +202,10 @@
             </objects>
             <point key="canvasLocation" x="3709" y="1649"/>
         </scene>
-        <!--Web View View Controller-->
+        <!--Web ViewVC-->
         <scene sceneID="Ec8-wV-Dqb">
             <objects>
-                <viewController storyboardIdentifier="WebViewViewController" id="P9a-n4-9aL" customClass="WebViewViewController" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="P9a-n4-9aL" customClass="WebViewVC" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ejl-Db-PK9"/>
                         <viewControllerLayoutGuide type="bottom" id="PdB-aj-Alb"/>
@@ -244,10 +244,10 @@
             </objects>
             <point key="canvasLocation" x="3709" y="2370"/>
         </scene>
-        <!--Login View Controller-->
+        <!--LoginVC-->
         <scene sceneID="SyH-e0-L2d">
             <objects>
-                <viewController id="BQx-w1-CMM" customClass="LoginViewController" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BQx-w1-CMM" customClass="LoginVC" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CEe-ow-TKa"/>
                         <viewControllerLayoutGuide type="bottom" id="UUo-bf-gpE"/>
@@ -320,7 +320,7 @@
         <!--Offline-->
         <scene sceneID="jtJ-V6-Nbe">
             <objects>
-                <tableViewController id="HZ2-z0-UW7" userLabel="Offline" customClass="OfflineViewController" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="HZ2-z0-UW7" userLabel="Offline" customClass="OfflineVC" customModule="putio" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="6Xq-TN-Mb6">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

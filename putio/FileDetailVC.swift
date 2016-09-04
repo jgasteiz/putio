@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
-class FileDetailViewController: UIViewController {
+class FileDetailVC: UIViewController {
     
     // Fetch task
     var fetchPutioTask: FetchPutioTask = FetchPutioTask.sharedInstance
@@ -68,8 +68,8 @@ class FileDetailViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == webViewSegueId {
-            let controller = segue.destinationViewController as! WebViewViewController
-            controller.file = file
+            let destination = segue.destinationViewController as! WebViewVC
+            destination.file = file
         }
     }
     
