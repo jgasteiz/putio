@@ -11,9 +11,6 @@ import Alamofire
 
 class PutioFilesController {
     
-    let fetchFilesURL: String = "https://api.put.io/v2/files/list"
-    let deleteFilesURL: String = "https://api.put.io/v2/files/delete"
-    
     var downloads = [Int: Dictionary<String, AnyObject>]()
     
     static let sharedInstance = PutioFilesController()
@@ -149,6 +146,36 @@ class PutioFilesController {
     }
     
     /*
+     Add a new transfer to the put.io transfers.
+     */
+    func addTransfer(downloadURL: String, onTransferAdded: () -> Void) {
+        guard let accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String else {
+            print("Access token is missing")
+            return
+        }
+        
+        Alamofire.request(
+            Alamofire.Method.POST,
+            getAddApiURL(accessToken),
+            parameters: [
+                "url": downloadURL,
+                "save_parent_id": 0,
+                "extract": true
+            ]
+        )
+            .response(completionHandler: { request, response, data, error in
+                if response?.statusCode == 200 {
+                    print("Transfer added successfully")
+                    onTransferAdded()
+                } else {
+                    print("Failed with error: \(error)")
+                    print(data)
+                    print(String(response))
+                }
+            })
+    }
+    
+    /*
      Return the download progress.
     */
     func getDownloadProgress(file: File) -> Float {
@@ -176,9 +203,9 @@ class PutioFilesController {
     */
     private func getApiURL (parent: File?, accessToken: String) -> NSURL {
         if parent != nil {
-            return NSURL(string: "\(fetchFilesURL)?oauth_token=\(accessToken)&parent_id=\(parent!.getId())")!
+            return NSURL(string: "https://api.put.io/v2/files/list?oauth_token=\(accessToken)&parent_id=\(parent!.getId())")!
         } else {
-            return NSURL(string: "\(fetchFilesURL)?oauth_token=\(accessToken)")!
+            return NSURL(string: "https://api.put.io/v2/files/list?oauth_token=\(accessToken)")!
         }
     }
     
@@ -186,6 +213,13 @@ class PutioFilesController {
      Get the API url for deleting a file in put.io.
     */
     private func getDeleteApiURL (accessToken: String) -> NSURL {
-        return NSURL(string: "\(deleteFilesURL)?oauth_token=\(accessToken)")!
+        return NSURL(string: "https://api.put.io/v2/files/delete?oauth_token=\(accessToken)")!
+    }
+    
+    /*
+     Get the API url for adding a new transfer.
+     */
+    private func getAddApiURL (accessToken: String) -> NSURL {
+        return NSURL(string: "https://api.put.io/v2/transfers/add?oauth_token=\(accessToken)")!
     }
 }

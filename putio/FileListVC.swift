@@ -10,6 +10,8 @@ import UIKit
 
 class FileListVC: UITableViewController {
     
+    // MARK: - Properties
+    
     // Ids
     let fileCellId = "FileCell"
     let viewControllerId = "FileListViewController"
@@ -27,17 +29,18 @@ class FileListVC: UITableViewController {
     // Define a spinner
     var activityIndicator: UIActivityIndicatorView?
 
+    // MARK: - Override functions
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if parent != nil {
-            self.navigationItem.title = parent!.getName()
+            navigationItem.title = parent!.getName()
         } else {
-            self.navigationItem.title = "Put.io viewer"
+            navigationItem.title = "Put.io viewer"
         }
         
         // Plain back button
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.Plain, target:nil, action:nil)
         
         // Set table cells automatic height
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -48,12 +51,41 @@ class FileListVC: UITableViewController {
         activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0,0, 16, 16))
         activityIndicator!.hidesWhenStopped = true
         activityIndicator!.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator!)
+        navigationItem.rightBarButtonItems?.append(UIBarButtonItem(customView: activityIndicator!))
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        fetchDirectoryFiles()
+    }
+    
+    // MARK: - IBActions
+    @IBAction func addItem(sender: AnyObject) {
+        let alertController = UIAlertController(
+            title: "New link",
+            message: "Paster the download link here", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        var newLinkTextField = UITextField()
+        
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "Magnet link"
+            newLinkTextField = textField
+        }
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { (UIAlertAction) in
+            if let downloadURL = newLinkTextField.text {
+                self.putioFilesController.addTransfer(downloadURL, onTransferAdded: {
+                    print("Success!")
+                })
+            }
+        }))
+        
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK: - Functions
+    func fetchDirectoryFiles () {
         // Fetch the files and directories in the current directory.
         activityIndicator!.startAnimating()
         putioFilesController.fetchDirectoryFiles(parent, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
@@ -82,25 +114,27 @@ class FileListVC: UITableViewController {
     }
 }
 
+// MARK: - Extensions
+
 extension FileListVC {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fileList.count;
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let indexPath = self.tableView.indexPathForSelectedRow as NSIndexPath! {
+        if let indexPath = tableView.indexPathForSelectedRow as NSIndexPath! {
             
             let file = fileList[indexPath.row]
 
             // If it's a directory, open it.
             if file.getContentType() == "application/x-directory" {
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(viewControllerId) as! FileListVC
+                let vc = storyboard?.instantiateViewControllerWithIdentifier(viewControllerId) as! FileListVC
                 vc.parent = file
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             } else {
-                let vc = self.storyboard?.instantiateViewControllerWithIdentifier(fileDetailViewControllerId) as! FileDetailVC
+                let vc = storyboard?.instantiateViewControllerWithIdentifier(fileDetailViewControllerId) as! FileDetailVC
                 vc.file = file
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             }
         }
     }

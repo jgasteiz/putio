@@ -58,7 +58,13 @@
                             <outlet property="delegate" destination="Xds-j9-Mwz" id="bGX-a0-vyA"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="blP-KA-tlR"/>
+                    <navigationItem key="navigationItem" id="blP-KA-tlR">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="VE1-fs-f1s">
+                            <connections>
+                                <action selector="addItem:" destination="Xds-j9-Mwz" id="tM7-CM-SgH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="GzM-2G-9hg" kind="show" identifier="ShowFileDetail" id="18w-2c-GFn"/>
                     </connections>
