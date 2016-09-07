@@ -70,14 +70,18 @@ class FileDetailVC: UIViewController {
         } else {
             playButton.setTitle("View File", forState: UIControlState.Normal)
         }
-        
-        // Check if there's a task running in the background.
-        checkDownloadStatus()
     }
     
     override func viewDidAppear(animated: Bool) {
-        // Check if there's a task running in the background.
-        checkDownloadStatus()
+        guard let file = file else {
+            print("There's no file to load.")
+            return
+        }
+        
+        // Check for the download status if the file is a video.
+        if file.isVideo() {
+            checkDownloadStatus()
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
