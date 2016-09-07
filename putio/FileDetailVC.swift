@@ -18,7 +18,7 @@ class FileDetailVC: UIViewController {
     
     // Controllers
     var putioFilesController = PutioFilesController.sharedInstance
-    let filesController = FilesController()
+    let offlineFilesController = OfflineFilesController()
     
     var statusCheckTimer: NSTimer?
     
@@ -40,13 +40,21 @@ class FileDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = file!.getName()
+        guard let file = file else {
+            print("There's no file to load.")
+            return
+        }
         
-        fileName.text = file!.getName()
-        fileSize.text = file!.getSize()
+        // Set the navigation title to the file name.
+        navigationItem.title = file.getName()
         
+        // Set the file name and size in the view labels.
+        fileName.text = file.getName()
+        fileSize.text = file.getSize()
+  
+        // Load a file image if it's a video and it has a thumbnail.
         imageView.hidden = true
-        if let thumbnailURL = NSURL(string: file!.getThumbnail()) {
+        if let thumbnailURL = NSURL(string: file.getThumbnail()) {
             if let data = NSData(contentsOfURL: thumbnailURL){
                 imageView.hidden = false
                 imageView.contentMode = UIViewContentMode.ScaleAspectFit
@@ -55,12 +63,12 @@ class FileDetailVC: UIViewController {
         }
         
         // Set title for the play button.
-        if file!.isVideo() {
+        if file.isVideo() {
             playButton.setTitle("Play Video", forState: UIControlState.Normal)
-        } else if file!.isAudio() {
+        } else if file.isAudio() {
             playButton.setTitle("Play Audio", forState: UIControlState.Normal)
         } else {
-            playButton.setTitle("View in WebView", forState: UIControlState.Normal)
+            playButton.setTitle("View File", forState: UIControlState.Normal)
         }
         
         // Check if there's a task running in the background.
@@ -83,21 +91,38 @@ class FileDetailVC: UIViewController {
     
     @IBAction func viewFile(sender: AnyObject) {
         if file!.isVideo() || file!.isAudio() {
-            let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("MediaViewController") as! AVPlayerViewController
+            let secondViewController = storyboard?.instantiateViewControllerWithIdentifier("MediaViewController") as! AVPlayerViewController
             
             if let file = file {
-                secondViewController.player = AVPlayer(URL: filesController.getFilePlaybackURL(file: file))
-                self.presentViewController(secondViewController, animated: true, completion: nil)
+                secondViewController.player = AVPlayer(URL: offlineFilesController.getFilePlaybackURL(file: file))
+                presentViewController(secondViewController, animated: true, completion: nil)
             }
         } else {
-            self.performSegueWithIdentifier(webViewSegueId, sender: sender)
+            performSegueWithIdentifier(webViewSegueId, sender: sender)
         }
     }
     
     @IBAction func downloadFile(sender: AnyObject) {
+        startFileDownload()
+    }
+    
+    @IBAction func deleteFile(sender: AnyObject) {
+        deleteLocalFile()
+    }
+    
+    @IBAction func cancelDownload(sender: AnyObject) {
+        cancelFileDownload()
+    }
+    
+    // MARK: - General functions
+    
+    /*
+     Start storing an offline version of the file.
+    */
+    func startFileDownload () {
         // If the file is downloaded already, don't continue.
         if let file = file {
-            if filesController.isFileOffline(file: file) {
+            if offlineFilesController.isFileOffline(file: file) {
                 notifyUser("This file has been downloaded already.")
                 
                 // Check the download status again and exit.
@@ -106,7 +131,7 @@ class FileDetailVC: UIViewController {
             }
             
             // Save the file for offline use.
-            putioController.downloadFile(
+            putioFilesController.downloadFile(
                 file: file,
                 downloadURL: file.getDownloadURL()
             )
@@ -114,10 +139,13 @@ class FileDetailVC: UIViewController {
         }
     }
     
-    @IBAction func deleteFile(sender: AnyObject) {
+    /*
+     Delete the offline version of the file.
+    */
+    func deleteLocalFile () {
         // If the file hasn't been downloaded yet, don't continue.
         if let file = file {
-            if !filesController.isFileOffline(file: file) {
+            if !offlineFilesController.isFileOffline(file: file) {
                 notifyUser("This file hasn't been downloaded yet.")
                 
                 // Check the download status again and exit.
@@ -126,43 +154,46 @@ class FileDetailVC: UIViewController {
             }
             
             // Delete the file.
-            filesController.deleteFile(file: file)
+            offlineFilesController.deleteOfflineFile(file: file)
             deleteButton.hidden = true
             downloadButton.hidden = false
         }
     }
     
-    @IBAction func cancelDownload(sender: AnyObject) {
-        putioController.cancelDownload(self.file!)
-        self.statusCheckTimer!.invalidate()
-        checkDownloadStatus()
+    /*
+     Cancel an active file download.
+     */
+    func cancelFileDownload () {
+        if let file = file {
+            putioFilesController.cancelDownload(file)
+            statusCheckTimer!.invalidate()
+            checkDownloadStatus()
+        }
     }
-    
-    // MARK: - General functions
     
     /*
      Check a file download status and starts a timer to check it every 250ms.
      */
-    func checkDownloadStatus() -> Void {
+    func checkDownloadStatus() {
         updateDownloadControlsVisibility()
         
-        self.statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(
+        statusCheckTimer = NSTimer.scheduledTimerWithTimeInterval(
             0.25,
             target: self,
             selector: #selector(FileDetailVC.updateProgressView),
             userInfo: nil,
             repeats: true
         )
-        self.statusCheckTimer?.fire()
+        statusCheckTimer?.fire()
     }
     
     /*
      Show or hide the download controls for a file depending on its status.
     */
-    func updateDownloadControlsVisibility() -> Void {
+    func updateDownloadControlsVisibility() {
         // If the file is downloaded, remove the "Download" button.
         if let file = file {
-            if filesController.isFileOffline(file: file) {
+            if offlineFilesController.isFileOffline(file: file) {
                 downloadButton.hidden = true
                 deleteButton.hidden = false
             } else {
@@ -175,24 +206,24 @@ class FileDetailVC: UIViewController {
     /*
      Update the progress view status with the download progress.
     */
-    func updateProgressView() -> Void {
-        if putioController.isTaskRunning(file!) {
+    func updateProgressView() {
+        if putioFilesController.isTaskRunning(file!) {
             if progressView.hidden == true {
                 showProgressView()
             }
-            let downloadProgress = putioController.getDownloadProgress(file!)
+            let downloadProgress = putioFilesController.getDownloadProgress(file!)
             print("Download status at \(downloadProgress * 100)%")
-            self.progressView.setProgress(downloadProgress, animated: true)
+            progressView.setProgress(downloadProgress, animated: true)
         } else {
             hideProgressView()
-            self.statusCheckTimer!.invalidate()
+            statusCheckTimer!.invalidate()
         }
     }
     
     /*
      Show the file download progress view.
     */
-    func showProgressView() -> Void {
+    func showProgressView() {
         progressView.setProgress(0, animated: false)
         progressView.hidden = false
         cancelDownload.hidden = false
@@ -203,7 +234,7 @@ class FileDetailVC: UIViewController {
     /*
      Hide the file download progress view.
     */
-    func hideProgressView() -> Void {
+    func hideProgressView() {
         progressView.setProgress(0, animated: false)
         progressView.hidden = true
         cancelDownload.hidden = true
@@ -214,7 +245,7 @@ class FileDetailVC: UIViewController {
     /*
      Shows the given message in a notification.
      */
-    func notifyUser(message: String) -> Void {
+    func notifyUser(message: String) {
         let alertController = UIAlertController(title: "Ooops", message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
         presentViewController(alertController, animated: true, completion: nil)

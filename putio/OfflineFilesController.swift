@@ -1,5 +1,5 @@
 //
-//  FilesController.swift
+//  OfflineFilesController.swift
 //  putio
 //
 //  Created by Javi Manzano on 04/09/2016.
@@ -8,24 +8,25 @@
 
 import Foundation
 
-class FilesController {
+class OfflineFilesController {
     
-    let fileManager = NSFileManager.defaultManager()
-    
+    /*
+     Return a list of offline files in the default documents directory.
+    */
     func getOfflineFiles() -> [File] {
         var fileList: [File] = []
         let paths = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentsURL = paths[0]
         
-        let accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String
-        
         do {
+            let fileManager = NSFileManager.defaultManager()
             let urlList = try fileManager.contentsOfDirectoryAtURL(documentsURL, includingPropertiesForKeys: nil, options: .SkipsPackageDescendants)
             for url in urlList {
-                let path = url.path
-                if path != nil {
-                    let pathComponents = path!.characters.split{$0 == "/"}.map(String.init)
-                    let fileName = pathComponents.last
+                
+                if url.path != nil {
+                    let fileName = url.path!.characters.split{$0 == "/"}.map(String.init).last
+                    
+                    // Only support mp4 files for offline usage.
                     if (fileName!.containsString("mp4")) {
                         fileList.append(
                             File(
@@ -38,38 +39,52 @@ class FilesController {
                                 hasMp4: true,
                                 size: -1,
                                 fileExtension: "mp4",
-                                accessToken: accessToken
+                                accessToken: ""
                             ))
                     }
                 }
             }
         } catch {
-            return fileList
+            print("Couldn't get the list of local files")
         }
+        
         return fileList
     }
     
-    func deleteFile (file file: File) {
-        let fileManager = NSFileManager.defaultManager()
+    /*
+     Delete a given file from the offline documents directory.
+    */
+    func deleteOfflineFile (file file: File) {
         do {
-            try fileManager.removeItemAtURL(getFileOfflineURL(file: file))
+            try NSFileManager.defaultManager().removeItemAtURL(getFileOfflineURL(file: file))
+            print("Deleted offline file")
         } catch {
             print("There was an error deleting \(file.getOfflineFileName())")
         }
     }
     
+    /*
+     Checks whether a file is offline or not.
+    */
     func isFileOffline(file file: File) -> Bool {
-        return fileManager.fileExistsAtPath(getFileOfflineURL(file: file).path!)
+        return NSFileManager.defaultManager().fileExistsAtPath(getFileOfflineURL(file: file).path!)
     }
     
+    /*
+     Gets a file playback url.
+    */
     func getFilePlaybackURL(file file: File) -> NSURL {
-        if self.isFileOffline(file: file) {
+        if isFileOffline(file: file) {
             return getFileOfflineURL(file: file)
         }
         return file.getDownloadURL()
     }
     
+    /*
+     Gets the path for an offline file
+    */
     func getFileOfflineURL(file file: File) -> NSURL {
+        let fileManager = NSFileManager.defaultManager()
         let documentsDirectory = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
         return documentsDirectory.URLByAppendingPathComponent(file.getOfflineFileName())
     }

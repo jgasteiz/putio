@@ -11,7 +11,7 @@
 		595D36221BE544B700A386EA /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D36211BE544B700A386EA /* File.swift */; };
 		595D36241BE54A0900A386EA /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D36231BE54A0900A386EA /* FileCell.swift */; };
 		597D306E1BEFA12900504B04 /* OfflineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D306D1BEFA12900504B04 /* OfflineVC.swift */; };
-		598FFB7B1D7C974E0076172C /* FilesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FFB7A1D7C974E0076172C /* FilesController.swift */; };
+		598FFB7B1D7C974E0076172C /* OfflineFilesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FFB7A1D7C974E0076172C /* OfflineFilesController.swift */; };
 		59B751C21BE677F50048513C /* FileDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C11BE677F50048513C /* FileDetailVC.swift */; };
 		59B751C41BE6872E0048513C /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C31BE6872E0048513C /* LoginVC.swift */; };
 		59B751CA1BE6A0A80048513C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B751C91BE6A0A80048513C /* Reachability.swift */; };
@@ -65,7 +65,7 @@
 		595D36211BE544B700A386EA /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		595D36231BE54A0900A386EA /* FileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		597D306D1BEFA12900504B04 /* OfflineVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineVC.swift; sourceTree = "<group>"; };
-		598FFB7A1D7C974E0076172C /* FilesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesController.swift; sourceTree = "<group>"; };
+		598FFB7A1D7C974E0076172C /* OfflineFilesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OfflineFilesController.swift; sourceTree = "<group>"; };
 		59B751C11BE677F50048513C /* FileDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDetailVC.swift; sourceTree = "<group>"; };
 		59B751C31BE6872E0048513C /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		59B751C91BE6A0A80048513C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 		598FFB791D7C97410076172C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				598FFB7A1D7C974E0076172C /* FilesController.swift */,
+				598FFB7A1D7C974E0076172C /* OfflineFilesController.swift */,
 				595D361F1BE5435500A386EA /* PutioFilesController.swift */,
 			);
 			name = Controllers;
@@ -423,7 +423,7 @@
 				59B751C41BE6872E0048513C /* LoginVC.swift in Sources */,
 				595D36221BE544B700A386EA /* File.swift in Sources */,
 				59D1DFD41BE4C1390074A7C6 /* putio.xcdatamodeld in Sources */,
-				598FFB7B1D7C974E0076172C /* FilesController.swift in Sources */,
+				598FFB7B1D7C974E0076172C /* OfflineFilesController.swift in Sources */,
 				597D306E1BEFA12900504B04 /* OfflineVC.swift in Sources */,
 				59B751C21BE677F50048513C /* FileDetailVC.swift in Sources */,
 				59D1DFCE1BE4C1390074A7C6 /* FileListVC.swift in Sources */,

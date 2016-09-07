@@ -12,8 +12,6 @@ class WebViewVC: UIViewController {
     
     var file: File? = nil
     
-    let filesController = FilesController()
-    
     @IBOutlet weak var webView: UIWebView!
     
     override func viewDidLoad() {
@@ -26,10 +24,4 @@ class WebViewVC: UIViewController {
             webView.loadRequest(NSURLRequest(URL: url))
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 }

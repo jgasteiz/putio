@@ -17,7 +17,7 @@ class OfflineVC: UITableViewController {
     let viewControllerId = "FileListViewController"
     let fileDetailViewControllerId = "FileDetailViewController"
     
-    let filesController = FilesController()
+    let offlineFilesController = OfflineFilesController()
     
     // List of files and directories
     var fileList: [File] = []
@@ -35,7 +35,7 @@ class OfflineVC: UITableViewController {
         super.viewDidAppear(animated)
         
         // Fetch the files and directories in the current directory.
-        fileList = filesController.getOfflineFiles()
+        fileList = offlineFilesController.getOfflineFiles()
         tableView.reloadData()
     }
 }
@@ -49,7 +49,7 @@ extension OfflineVC {
         if let indexPath = self.tableView.indexPathForSelectedRow as NSIndexPath! {
             let vc = self.storyboard?.instantiateViewControllerWithIdentifier("MediaViewController") as! AVPlayerViewController
             
-            vc.player = AVPlayer(URL: filesController.getFilePlaybackURL(file: fileList[indexPath.row]))
+            vc.player = AVPlayer(URL: offlineFilesController.getFilePlaybackURL(file: fileList[indexPath.row]))
             
             self.presentViewController(vc, animated: true, completion: nil)
         }
@@ -70,7 +70,7 @@ extension OfflineVC {
             let file = fileList[indexPath.row]
             
             // Delete the local file.
-            filesController.deleteFile(file: file)
+            offlineFilesController.deleteOfflineFile(file: file)
             
             // Update the file list and tableview.
             fileList.removeAtIndex(indexPath.row)
