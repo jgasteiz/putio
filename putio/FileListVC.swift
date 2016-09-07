@@ -119,6 +119,19 @@ extension FileListVC {
         
         return cell
     }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            let file = fileList[indexPath.row]
+            
+            // Delete the remote file.
+            putioFilesController.deleteRemoteFile(file)
+            
+            // Update the file list and tableview.
+            fileList.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        }
+    }
 }
 
 
