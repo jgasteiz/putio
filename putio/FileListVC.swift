@@ -16,7 +16,7 @@ class FileListVC: UITableViewController {
     let fileDetailViewControllerId = "FileDetailViewController"
     
     // Fetch task
-    var putioController = PutioController.sharedInstance
+    var putioFilesController = PutioFilesController.sharedInstance
     
     // This won't be null if we're not in the root.
     var parent: File?
@@ -56,7 +56,7 @@ class FileListVC: UITableViewController {
         
         // Fetch the files and directories in the current directory.
         activityIndicator!.startAnimating()
-        putioController.fetchDirectoryFiles(parent, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
+        putioFilesController.fetchDirectoryFiles(parent, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
     }
 
     func onFilesLoadSuccess(files: [File]) {

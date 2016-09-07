@@ -17,7 +17,7 @@ class FileDetailVC: UIViewController {
     var file: File? = nil
     
     // Controllers
-    var putioController = PutioController.sharedInstance
+    var putioFilesController = PutioFilesController.sharedInstance
     let filesController = FilesController()
     
     var statusCheckTimer: NSTimer?
