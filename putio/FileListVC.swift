@@ -56,23 +56,66 @@ class FileListVC: UITableViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
         fetchDirectoryFiles()
     }
     
+    
+    
     // MARK: - IBActions
-    @IBAction func addItem(sender: AnyObject) {
+    
+    @IBAction func addTransfer(sender: AnyObject) {
+        addTransfer()
+    }
+    
+    
+    
+    // MARK: - Functions
+    
+    /*
+     Fetch the files and directories in the current directory.
+    */
+    func fetchDirectoryFiles () {
+        activityIndicator!.startAnimating()
+        
+        putioFilesController.fetchDirectoryFiles(parent, onTaskDone: ({ (files) in
+            self.activityIndicator!.stopAnimating()
+            self.fileList = files
+            self.tableView.reloadData()
+        }), onTaskError: ({
+            self.activityIndicator!.stopAnimating()
+            
+            self.fileList = []
+            self.tableView.reloadData()
+            
+            // Show error message
+            let alertController = UIAlertController(
+                title: "Ooops",
+                message: "There was an error fetching the files. Please, try again later.",
+                preferredStyle: UIAlertControllerStyle.Alert
+            )
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }))
+    }
+    
+    /*
+     Open an alert to ask the user for a link and add it to the put.io transfers.
+    */
+    func addTransfer () {
+        var newLinkTextField = UITextField()
+        
         let alertController = UIAlertController(
             title: "New link",
-            message: "Paster the download link here", preferredStyle: UIAlertControllerStyle.Alert)
-        
-        var newLinkTextField = UITextField()
+            message: "Paste the download link here",
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
         
         alertController.addTextFieldWithConfigurationHandler { (textField) in
             textField.placeholder = "Magnet link"
             newLinkTextField = textField
         }
-        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
         alertController.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { (UIAlertAction) in
             if let downloadURL = newLinkTextField.text {
                 self.putioFilesController.addTransfer(downloadURL, onTransferAdded: {
@@ -84,31 +127,27 @@ class FileListVC: UITableViewController {
         presentViewController(alertController, animated: true, completion: nil)
     }
     
-    // MARK: - Functions
-    func fetchDirectoryFiles () {
-        // Fetch the files and directories in the current directory.
-        activityIndicator!.startAnimating()
-        putioFilesController.fetchDirectoryFiles(parent, onTaskDone: onFilesLoadSuccess, onTaskError: onStoriesLoadError)
-    }
-
-    func onFilesLoadSuccess(files: [File]) {
-        activityIndicator!.stopAnimating()
+    /*
+     Open an alert to ask the user about deleting a put.io file/directory.
+    */
+    func deleteFile (file: File, indexPath: NSIndexPath) {
         
-        fileList = files
+        let alertController = UIAlertController(
+            title: "Delete file",
+            message: "Do you want to delete the file `\(file.getName())`?",
+            preferredStyle: UIAlertControllerStyle.Alert
+        )
         
-        tableView.reloadData()
-    }
-    
-    func onStoriesLoadError() {
-        activityIndicator!.stopAnimating()
-        
-        fileList = []
-        tableView.reloadData()
-        
-        // Show error message
-        let alertController = UIAlertController(title: "Ooops", message:
-            "There was an error fetching the files. Please, try again later.", preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+        alertController.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Destructive, handler: { (UIAlertAction) in
+            // Delete the remote file.
+            self.putioFilesController.deleteRemoteFile(file, onFileDeleted: {
+                
+                // Update the file list and tableview.
+                self.fileList.removeAtIndex(indexPath.row)
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            })
+        }))
         
         presentViewController(alertController, animated: true, completion: nil)
     }
@@ -157,14 +196,7 @@ extension FileListVC {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let file = fileList[indexPath.row]
-            
-            // Delete the remote file.
-            putioFilesController.deleteRemoteFile(file, onFileDeleted: {
-                
-                // Update the file list and tableview.
-                self.fileList.removeAtIndex(indexPath.row)
-                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            })
+            deleteFile(file, indexPath: indexPath)
         }
     }
 }
