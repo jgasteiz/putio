@@ -12,6 +12,7 @@ import Alamofire
 class PutioFilesController {
     
     let fetchFilesURL: String = "https://api.put.io/v2/files/list"
+    let deleteFilesURL: String = "https://api.put.io/v2/files/delete"
     
     var downloads = [Int: Dictionary<String, AnyObject>]()
     
@@ -26,13 +27,9 @@ class PutioFilesController {
             return
         }
         
-        let apiURL = getApiURL(parent, accessToken: accessToken)
-        
-        // Get the top stories
-        let sharedSession = NSURLSession.sharedSession()
-        
-        let downloadTask: NSURLSessionDownloadTask = sharedSession.downloadTaskWithURL(
-            apiURL,
+        // Get the files in the directory
+        let downloadTask: NSURLSessionDownloadTask = NSURLSession.sharedSession().downloadTaskWithURL(
+            getApiURL(parent, accessToken: accessToken),
             completionHandler:
             { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
             
@@ -128,8 +125,27 @@ class PutioFilesController {
     /*
      Delete a remote put.io file or directory.
     */
-    func deleteRemoteFile(file: File) {
-        print("Deleting file!")
+    func deleteRemoteFile(file: File, onFileDeleted: () -> Void) {
+        guard let accessToken = NSUserDefaults.standardUserDefaults().valueForKey("accessToken") as? String else {
+            print("Access token is missing")
+            return
+        }
+        
+        Alamofire.request(
+            Alamofire.Method.POST,
+            getDeleteApiURL(accessToken),
+            parameters: ["file_ids": String(file.getId())]
+        )
+        .response(completionHandler: { request, response, data, error in
+            if response?.statusCode == 200 {
+                print("File deleted successfully: \(file.getName())")
+                onFileDeleted()
+            } else {
+                print("Failed with error: \(error)")
+                print(data)
+                print(String(response))
+            }
+        })
     }
     
     /*
@@ -156,7 +172,7 @@ class PutioFilesController {
     }
 
     /*
-     Get the API url necessary
+     Get the API url necessary for fetching a file/directory from put.io.
     */
     private func getApiURL (parent: File?, accessToken: String) -> NSURL {
         if parent != nil {
@@ -164,5 +180,12 @@ class PutioFilesController {
         } else {
             return NSURL(string: "\(fetchFilesURL)?oauth_token=\(accessToken)")!
         }
+    }
+    
+    /*
+     Get the API url for deleting a file in put.io.
+    */
+    private func getDeleteApiURL (accessToken: String) -> NSURL {
+        return NSURL(string: "\(deleteFilesURL)?oauth_token=\(accessToken)")!
     }
 }

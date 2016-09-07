@@ -125,11 +125,12 @@ extension FileListVC {
             let file = fileList[indexPath.row]
             
             // Delete the remote file.
-            putioFilesController.deleteRemoteFile(file)
-            
-            // Update the file list and tableview.
-            fileList.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            putioFilesController.deleteRemoteFile(file, onFileDeleted: {
+                
+                // Update the file list and tableview.
+                self.fileList.removeAtIndex(indexPath.row)
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            })
         }
     }
 }
